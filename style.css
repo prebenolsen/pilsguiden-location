@@ -1,0 +1,226 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+#panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 10px;
+  padding: 14px 16px;
+  width: 280px;
+  max-width: calc(100vw - 24px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+}
+
+#panel h1 {
+  font-size: 18px;
+  margin: 0 0 2px;
+}
+
+.subtitle {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #555;
+}
+
+.subtitle a {
+  color: #0366d6;
+}
+
+.row {
+  margin: 10px 0;
+}
+
+#locate-btn {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#locate-btn:hover {
+  background: #27ae60;
+}
+
+#locate-status {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.price-filter label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.slider {
+  position: relative;
+  height: 24px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+}
+
+.slider-range {
+  position: absolute;
+  top: 10px;
+  height: 4px;
+  background: #555;
+  border-radius: 2px;
+}
+
+.slider input[type="range"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.slider input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #555;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.slider input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #555;
+  cursor: pointer;
+}
+
+.slider input[type="range"]::-webkit-slider-runnable-track,
+.slider input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #555;
+}
+
+.legend-gradient {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #1fa84c, #f1c40f, #e74c3c);
+}
+
+.stats {
+  font-size: 12px;
+  color: #444;
+}
+
+.stale-note {
+  font-size: 11px;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.stale-dot {
+  background: #999;
+  border: 2px dashed #333;
+}
+
+/* Leaflet popup content */
+.bar-popup h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.bar-popup .price {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bar-popup .address {
+  color: #555;
+  font-size: 12px;
+  margin: 2px 0 6px;
+}
+
+.bar-popup .meta {
+  font-size: 12px;
+  color: #444;
+}
+
+.bar-popup .stale-warning {
+  color: #b35900;
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.bar-popup a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.user-location-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1a73e8;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #1a73e8, 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 480px) {
+  #panel {
+    width: calc(100vw - 24px);
+  }
+}

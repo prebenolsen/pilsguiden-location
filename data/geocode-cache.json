@@ -1,0 +1,2111 @@
+{
+  "fjordalléen 4, 0250 oslo": {
+    "lat": 59.909137,
+    "lng": 10.725161
+  },
+  "herslebs gate 4a, 0561 oslo": {
+    "lat": 59.919494,
+    "lng": 10.762425
+  },
+  "kirkeveien 64a, 0364 oslo": {
+    "lat": 59.929256,
+    "lng": 10.71547
+  },
+  "waldemar thranes gate 75, 0175 oslo": {
+    "lat": 59.928124,
+    "lng": 10.753721
+  },
+  "osterhaus' gate 12, 0183 oslo": {
+    "lat": 59.916867,
+    "lng": 10.753768
+  },
+  "trondheimsveien 14a, 0560 oslo": {
+    "lat": 59.919653,
+    "lng": 10.76467
+  },
+  "thorvald meyers gate 57, 0552 oslo": {
+    "lat": 59.923321,
+    "lng": 10.758298
+  },
+  "hausmanns gate 8b, 0182 oslo": {
+    "lat": 59.916718,
+    "lng": 10.756393
+  },
+  "sørengkaia 70, 0194 oslo": {
+    "lat": 59.902289,
+    "lng": 10.755472
+  },
+  "operagata 61a, 0194 oslo": {
+    "lat": 59.906753,
+    "lng": 10.757844
+  },
+  "lørenveien 71a, 0580 oslo": {
+    "lat": 59.928929,
+    "lng": 10.79955
+  },
+  "torggata 23, 0183 oslo": {
+    "lat": 59.916623,
+    "lng": 10.752775
+  },
+  "schweigaards gate 15, 0191 oslo": {
+    "lat": 59.911009,
+    "lng": 10.759543
+  },
+  "kingos gate 1, 0457 oslo": {
+    "lat": 59.928258,
+    "lng": 10.75135
+  },
+  "nedre slottsgate 8, 0157 oslo": {
+    "lat": 59.912157,
+    "lng": 10.742756
+  },
+  "bogstadveien 54, 0375 oslo": {
+    "lat": 59.927909,
+    "lng": 10.718245
+  },
+  "helgesens gate 32, 0553 oslo": {
+    "lat": 59.92428,
+    "lng": 10.762518
+  },
+  "sandakerveien 59, 0477 oslo": {
+    "lat": 59.938436,
+    "lng": 10.768478
+  },
+  "schouterrassen 25, 0573 oslo": {
+    "lat": 59.931547,
+    "lng": 10.783108
+  },
+  "trondheimsveien 139 a, 0570 oslo": {
+    "lat": 59.92934,
+    "lng": 10.778301
+  },
+  "bernt ankers gate 37, 0179 oslo": {
+    "lat": 59.917023,
+    "lng": 10.75027
+  },
+  "trondheimsveien 391, 0953 oslo": {
+    "lat": 59.952359,
+    "lng": 10.867368
+  },
+  "storgata 39, 0182 oslo": {
+    "lat": 59.915124,
+    "lng": 10.754681
+  },
+  "storgata 13, 0155 oslo": {
+    "lat": 59.913453,
+    "lng": 10.749352
+  },
+  "eiriks gate 17, 0650 oslo": {
+    "lat": 59.912637,
+    "lng": 10.773472
+  },
+  "toftes gate 30, 0556 oslo": {
+    "lat": 59.927054,
+    "lng": 10.761269
+  },
+  "parkveien 25, 0350 oslo": {
+    "lat": 59.920696,
+    "lng": 10.72815
+  },
+  "vitaminveien 7-9, 0485 oslo": {
+    "lat": 59.9469983,
+    "lng": 10.7720618
+  },
+  "bogstadveien 62, 0366 oslo": {
+    "lat": 59.928401,
+    "lng": 10.71632
+  },
+  "torggata 18, 0181 oslo": {
+    "lat": 59.916107,
+    "lng": 10.751479
+  },
+  "pilestredet 65, 0350 oslo": {
+    "lat": 59.924611,
+    "lng": 10.730742
+  },
+  "grønlandsleiret 1, 0190 oslo": {
+    "lat": 59.912591,
+    "lng": 10.762851
+  },
+  "thorvald meyers gate 40a, 0555 oslo": {
+    "lat": 59.923719,
+    "lng": 10.759447
+  },
+  "trondheimsveien 187, 0570 oslo": {
+    "lat": 59.935021,
+    "lng": 10.780592
+  },
+  "biskop gunnerus' gate 3, 0155 oslo": {
+    "lat": 59.912457,
+    "lng": 10.749962
+  },
+  "prinsens gate 20a, 0153 oslo": {
+    "lat": 59.911524,
+    "lng": 10.742533
+  },
+  "schweigaards gate 17, 0191 oslo": {
+    "lat": 59.910588,
+    "lng": 10.761488
+  },
+  "pløens gate 4, 0181 oslo": {
+    "lat": 59.914068,
+    "lng": 10.749027
+  },
+  "trondheimsveien 235, 0587 oslo": {
+    "lat": 59.93867,
+    "lng": 10.79065
+  },
+  "karl johans gt. 26, 0162 oslo": {
+    "lat": 59.914823,
+    "lng": 10.734686
+  },
+  "holmlia senter vei 1b, 1255 oslo": {
+    "lat": 59.8346487,
+    "lng": 10.7954928
+  },
+  "waldemar thranes gate 65b, 0173 oslo": {
+    "lat": 59.927865,
+    "lng": 10.74949
+  },
+  "ammerudveien 21, 0958 oslo": {
+    "lat": 59.958994,
+    "lng": 10.871383
+  },
+  "markens gate 19b, 4611 kristiansand": {
+    "lat": 58.1452301,
+    "lng": 7.9929485
+  },
+  "dronningens gate 22, 0152 oslo": {
+    "lat": 59.910774,
+    "lng": 10.746797
+  },
+  "storgata 22, 0184 oslo": {
+    "lat": 59.913837,
+    "lng": 10.751555
+  },
+  "romsås senter 1, 0970 oslo": {
+    "lat": 59.963161,
+    "lng": 10.892858
+  },
+  "langbølgen 3, 1150 oslo": {
+    "lat": 59.873361,
+    "lng": 10.811718
+  },
+  "olaf schous vei 2, 0572 oslo": {
+    "lat": 59.930441,
+    "lng": 10.781939
+  },
+  "grønland 3, 0188 oslo": {
+    "lat": 59.913121,
+    "lng": 10.759422
+  },
+  "mandalls gate 10, 0190 oslo": {
+    "lat": 59.911095,
+    "lng": 10.763214
+  },
+  "plogveien 6, 0679 oslo": {
+    "lat": 59.89729,
+    "lng": 10.81286
+  },
+  "st. halvards gate 65, 0657 oslo": {
+    "lat": 59.907209,
+    "lng": 10.780459
+  },
+  "kirkeveien 104a, 0361 oslo": {
+    "lat": 59.933334,
+    "lng": 10.725722
+  },
+  "rosteds gate 7, 0178 oslo": {
+    "lat": 59.919566,
+    "lng": 10.750264
+  },
+  "haugerudsentret 1, 0673 oslo": null,
+  "trondheimsveien 64, 0565 oslo": {
+    "lat": 59.92309,
+    "lng": 10.771579
+  },
+  "thorvald meyers gate 65c, 0552 oslo": {
+    "lat": 59.921628,
+    "lng": 10.758586
+  },
+  "bjerregaards gate 70a, 0174 oslo": {
+    "lat": 59.927273,
+    "lng": 10.749561
+  },
+  "storgata 24, 0184 oslo": {
+    "lat": 59.913897,
+    "lng": 10.751737
+  },
+  "st. halvards gate 23, 0192 oslo": {
+    "lat": 59.905984,
+    "lng": 10.770932
+  },
+  "sofienberggata 6, 0551 oslo": {
+    "lat": 59.922422,
+    "lng": 10.757016
+  },
+  "grensesvingen 7, 0661 oslo": {
+    "lat": 59.914092,
+    "lng": 10.798645
+  },
+  "refstadveien 44, 0589 oslo": {
+    "lat": 59.942033,
+    "lng": 10.808013
+  },
+  "refstadveien 68, 0589 oslo": {
+    "lat": 59.942403,
+    "lng": 10.811703
+  },
+  "vogts gate 45a, 0477 oslo": {
+    "lat": 59.933992,
+    "lng": 10.764322
+  },
+  "trondheimsveien 8, 0560 oslo": {
+    "lat": 59.91927,
+    "lng": 10.763719
+  },
+  "osterhaus' gate 6d, 0183 oslo": {
+    "lat": 59.916094,
+    "lng": 10.75456
+  },
+  "torggata 27, 0183 oslo": {
+    "lat": 59.916912,
+    "lng": 10.753309
+  },
+  "torggata 34, 0183 oslo": {
+    "lat": 59.917277,
+    "lng": 10.753578
+  },
+  "dalsbergstien 4, 0170 oslo": {
+    "lat": 59.92282,
+    "lng": 10.739862
+  },
+  "trondheimsveien 20a, 0560 oslo": {
+    "lat": 59.919957,
+    "lng": 10.766045
+  },
+  "schweigaards gate 4, 0185 oslo": {
+    "lat": 59.912004,
+    "lng": 10.755625
+  },
+  "vålerenggata 5, 0657 oslo": {
+    "lat": 59.907463,
+    "lng": 10.784159
+  },
+  "vestlisvingen 188, 0969 oslo": {
+    "lat": 59.972508,
+    "lng": 10.928368
+  },
+  "sørkedalsveien 1, 0369 oslo": {
+    "lat": 59.929966,
+    "lng": 10.713413
+  },
+  "c. j. hambros plass 5, 0164 oslo": {
+    "lat": 59.915407,
+    "lng": 10.740851
+  },
+  "prinsens gate 26, 0157 oslo": {
+    "lat": 59.912244,
+    "lng": 10.739559
+  },
+  "grønlandsleiret 46, 0190 oslo": {
+    "lat": 59.908815,
+    "lng": 10.768458
+  },
+  "schweigaards gate 53a, 0191 oslo": {
+    "lat": 59.908638,
+    "lng": 10.767726
+  },
+  "majorstuveien 34, 0367 oslo": {
+    "lat": 59.92764,
+    "lng": 10.71544
+  },
+  "turbinveien 26, 0195 oslo": {
+    "lat": 59.904112,
+    "lng": 10.78954
+  },
+  "lilleakerveien 23, 0283 oslo": {
+    "lat": 59.918942,
+    "lng": 10.63664
+  },
+  "strømsveien 1, 0657 oslo": {
+    "lat": 59.907955,
+    "lng": 10.782987
+  },
+  "pilestredet 9, 0180 oslo": {
+    "lat": 59.915143,
+    "lng": 10.741124
+  },
+  "rolf hofmos gate 3, 0658 oslo": {
+    "lat": 59.91203,
+    "lng": 10.78628
+  },
+  "briskebyveien 42, 0259 oslo": {
+    "lat": 59.920467,
+    "lng": 10.717252
+  },
+  "pilestredet 84, 0354 oslo": {
+    "lat": 59.929593,
+    "lng": 10.730286
+  },
+  "arbeidersamfunnets plass 1, 0181 oslo": {
+    "lat": 59.915522,
+    "lng": 10.751804
+  },
+  "sannergata 38, 0557 oslo": {
+    "lat": 59.92892,
+    "lng": 10.766559
+  },
+  "vulkan 5, 0182 oslo": {
+    "lat": 59.922253,
+    "lng": 10.751749
+  },
+  "schweigaards gate 50 b, 0191 oslo": {
+    "lat": 59.90885,
+    "lng": 10.76787
+  },
+  "nedre kalbakkvei 2, 0950 oslo": {
+    "lat": 59.951368,
+    "lng": 10.867008
+  },
+  "thereses gate 30e, 0168 oslo": {
+    "lat": 59.928158,
+    "lng": 10.732428
+  },
+  "nedre kalbakkvei 4, 0950 oslo": {
+    "lat": 59.950968,
+    "lng": 10.86729
+  },
+  "grefsenveien 94a, 0492 oslo": {
+    "lat": 59.955975,
+    "lng": 10.785262
+  },
+  "tordenskiolds gate 7-9, 0160 oslo": {
+    "lat": 59.9120021,
+    "lng": 10.7353775
+  },
+  "schleppegrells gate 32, 0556 oslo": {
+    "lat": 59.927441,
+    "lng": 10.765209
+  },
+  "hausmanns gate 29, 0182 oslo": {
+    "lat": 59.917673,
+    "lng": 10.754018
+  },
+  "thorvald meyers gate 36, 0555 oslo": {
+    "lat": 59.924205,
+    "lng": 10.759401
+  },
+  "carl berners plass 2, 0568 oslo": {
+    "lat": 59.926505,
+    "lng": 10.776109
+  },
+  "grønlandsleiret 18a, 0190 oslo": {
+    "lat": 59.91227,
+    "lng": 10.76565
+  },
+  "bogstadveien 8, 0355 oslo": {
+    "lat": 59.924627,
+    "lng": 10.724015
+  },
+  "hammersborggata 9, 0181 oslo": {
+    "lat": 59.914913,
+    "lng": 10.752275
+  },
+  "karen platous vei 33, 0988 oslo": {
+    "lat": 59.968695,
+    "lng": 10.916985
+  },
+  "hausmanns gate 28-32, 0182 oslo": {
+    "lat": 59.9174794,
+    "lng": 10.7547444
+  },
+  "bentsegata 1 a, 0465 oslo": {
+    "lat": 59.937909,
+    "lng": 10.756713
+  },
+  "lakkegata 71, 0562 oslo": {
+    "lat": 59.918613,
+    "lng": 10.765133
+  },
+  "valkyriegata 15b, 0366 oslo": {
+    "lat": 59.929517,
+    "lng": 10.716807
+  },
+  "trondheimsveien 37, 0560 oslo": {
+    "lat": 59.921148,
+    "lng": 10.769705
+  },
+  "stovner senter 3, 0985 oslo": {
+    "lat": 59.962146,
+    "lng": 10.924524
+  },
+  "hagegata 34, 0653 oslo": {
+    "lat": 59.913702,
+    "lng": 10.776409
+  },
+  "storgata 36g, 0182 oslo": {
+    "lat": 59.915307,
+    "lng": 10.755685
+  },
+  "schweigaards gate 34c, 0191 oslo": {
+    "lat": 59.909755,
+    "lng": 10.765757
+  },
+  "hausmanns gate 34, 0182 oslo": {
+    "lat": 59.919148,
+    "lng": 10.751978
+  },
+  "vogts gate 54, 0477 oslo": {
+    "lat": 59.935368,
+    "lng": 10.764828
+  },
+  "osterhaus' gate 11, 0183 oslo": {
+    "lat": 59.916466,
+    "lng": 10.753348
+  },
+  "grorudveien 5, 0962 oslo": {
+    "lat": 59.958631,
+    "lng": 10.882408
+  },
+  "brugata 3a, 0186 oslo": {
+    "lat": 59.914342,
+    "lng": 10.754067
+  },
+  "arbeidergata 2, 0159 oslo": {
+    "lat": 59.914464,
+    "lng": 10.740856
+  },
+  "frognerveien 58, 0266 oslo": {
+    "lat": 59.922323,
+    "lng": 10.704395
+  },
+  "brugata 14, 0186 oslo": {
+    "lat": 59.913884,
+    "lng": 10.755403
+  },
+  "thorvald meyers gate 47 a, 0555 oslo": {
+    "lat": 59.924155,
+    "lng": 10.758885
+  },
+  "welhavens gate 21, 0350 oslo": {
+    "lat": 59.921255,
+    "lng": 10.730531
+  },
+  "rolf hofmos gate 34, 0655 oslo": {
+    "lat": 59.913195,
+    "lng": 10.788651
+  },
+  "kristian ivs gate 12, 0164 oslo": {
+    "lat": 59.915454,
+    "lng": 10.737956
+  },
+  "thorvald meyers gate 2a, 0555 oslo": {
+    "lat": 59.930179,
+    "lng": 10.759252
+  },
+  "vestgrensa 2, 0851 oslo": {
+    "lat": 59.94079,
+    "lng": 10.729133
+  },
+  "vogts gate 58a, 0477 oslo": {
+    "lat": 59.9356355,
+    "lng": 10.765264
+  },
+  "youngstorget 6, 0181 oslo": {
+    "lat": 59.91512,
+    "lng": 10.748417
+  },
+  "brugata 11, 0186 oslo": {
+    "lat": 59.913825,
+    "lng": 10.756473
+  },
+  "lørenveien 44, 0585 oslo": {
+    "lat": 59.93066,
+    "lng": 10.793582
+  },
+  "eugenies gate 1, 0168 oslo": {
+    "lat": 59.927502,
+    "lng": 10.732216
+  },
+  "storgata 55, 0182 oslo": {
+    "lat": 59.917646,
+    "lng": 10.758188
+  },
+  "mariboes gate 7, 0183 oslo": {
+    "lat": 59.916424,
+    "lng": 10.750686
+  },
+  "storgata 25, 0184 oslo": {
+    "lat": 59.914012,
+    "lng": 10.751188
+  },
+  "thorvald meyers gate 32, 0555 oslo": {
+    "lat": 59.924814,
+    "lng": 10.759523
+  },
+  "grønland 28, 0188 oslo": {
+    "lat": 59.912875,
+    "lng": 10.762432
+  },
+  "brenneriveien 7, 0182 oslo": {
+    "lat": 59.919744,
+    "lng": 10.752456
+  },
+  "seilduksgata 20 a, 0556 oslo": {
+    "lat": 59.925721,
+    "lng": 10.761557
+  },
+  "markveien 35b, 0554 oslo": {
+    "lat": 59.921737,
+    "lng": 10.757195
+  },
+  "thorvald meyers gate 76b, 0550 oslo": {
+    "lat": 59.919279,
+    "lng": 10.759712
+  },
+  "sørkedalsveien 1b, 0369 oslo": {
+    "lat": 59.929966,
+    "lng": 10.713413
+  },
+  "vulkan 5, 0178 oslo": {
+    "lat": 59.922253,
+    "lng": 10.751749
+  },
+  "vulkan 7, 0178 oslo": {
+    "lat": 59.922571,
+    "lng": 10.751958
+  },
+  "tollbugata 7b, 0152 oslo": {
+    "lat": 59.909924,
+    "lng": 10.746555
+  },
+  "gjerdrums vei 12a, 0484 oslo": {
+    "lat": 59.954611,
+    "lng": 10.765131
+  },
+  "kristian augusts gate 15-17, 0164 oslo": {
+    "lat": 59.9161808,
+    "lng": 10.7394386
+  },
+  "schleppegrells gate 30, 0557 oslo": {
+    "lat": 59.927339,
+    "lng": 10.764137
+  },
+  "wergelandsveien 17, 0167 oslo": {
+    "lat": 59.91943,
+    "lng": 10.730615
+  },
+  "ullevålsveien 28, 0171 oslo": {
+    "lat": 59.927714,
+    "lng": 10.741317
+  },
+  "thorvald meyers gate 23, 0555 oslo": {
+    "lat": 59.927393,
+    "lng": 10.758764
+  },
+  "skovveien 3, 0257 oslo": {
+    "lat": 59.915867,
+    "lng": 10.716031
+  },
+  "schweigaards gate 60b, 0656 oslo": {
+    "lat": 59.908041,
+    "lng": 10.771278
+  },
+  "hausmanns gate, 0182 oslo": {
+    "lat": 59.9164295,
+    "lng": 10.7562774
+  },
+  "nordstrandveien 40, 1162 oslo": {
+    "lat": 59.86102,
+    "lng": 10.799584
+  },
+  "universitetsgata 2, 0164 oslo": {
+    "lat": 59.917498,
+    "lng": 10.740059
+  },
+  "brugata 9, 0186 oslo": {
+    "lat": 59.913911,
+    "lng": 10.756101
+  },
+  "hedmarksgata 1, 0658 oslo": {
+    "lat": 59.909646,
+    "lng": 10.789373
+  },
+  "grønland 24, 0188 oslo": {
+    "lat": 59.912936,
+    "lng": 10.761899
+  },
+  "skippergata 3, 0152 oslo": {
+    "lat": 59.907943,
+    "lng": 10.744949
+  },
+  "torshovgata 15, 0476 oslo": {
+    "lat": 59.933132,
+    "lng": 10.766155
+  },
+  "grønlandsleiret 39, 0190 oslo": {
+    "lat": 59.910963,
+    "lng": 10.766981
+  },
+  "jordalgata 2, 0657 oslo": {
+    "lat": 59.908309,
+    "lng": 10.779497
+  },
+  "monrads gate 1, 0577 oslo": {
+    "lat": 59.915592,
+    "lng": 10.773451
+  },
+  "kirkegårdsgata 7a, 0558 oslo": {
+    "lat": 59.921352,
+    "lng": 10.763883
+  },
+  "keysers gate 7b, 0165 oslo": {
+    "lat": 59.916894,
+    "lng": 10.742468
+  },
+  "sandakerveien 72 c, 0484 oslo": {
+    "lat": 59.9424395,
+    "lng": 10.7699621
+  },
+  "mariboes gate 8, 0183 oslo": {
+    "lat": 59.916682,
+    "lng": 10.750517
+  },
+  "wilhelm færdens vei 1a, 0361 oslo": {
+    "lat": 59.932609,
+    "lng": 10.724215
+  },
+  "refstadveien 27, 0589 oslo": {
+    "lat": 59.941297,
+    "lng": 10.810886
+  },
+  "karl johans gate 10, 0154 oslo": {
+    "lat": 59.911812,
+    "lng": 10.746458
+  },
+  "kaj munks vei 41, 0876 oslo": {
+    "lat": 59.952435,
+    "lng": 10.751192
+  },
+  "vitaminveien 11, 0484 oslo": {
+    "lat": 59.9471493,
+    "lng": 10.7713832
+  },
+  "lørenfaret 1a, 0585 oslo": {
+    "lat": 59.931016,
+    "lng": 10.799677
+  },
+  "europarådets plass 1, 0154 oslo": {
+    "lat": 59.911976,
+    "lng": 10.7497894
+  },
+  "aud schønemanns vei 9, 0576 oslo": {
+    "lat": 59.920791,
+    "lng": 10.784194
+  },
+  "vogts gate 60, 0477 oslo": {
+    "lat": 59.935901,
+    "lng": 10.765282
+  },
+  "thereses gate 47, 0354 oslo": {
+    "lat": 59.926439,
+    "lng": 10.731088
+  },
+  "thorvald meyers gate 33a, 0555 oslo": {
+    "lat": 59.926001,
+    "lng": 10.758709
+  },
+  "stenersgata 1, 0050 oslo": {
+    "lat": 59.91275,
+    "lng": 10.751569
+  },
+  "bryggetorget 14, 0250 oslo": {
+    "lat": 59.909344,
+    "lng": 10.724439
+  },
+  "seilduksgata 17, 0553 oslo": {
+    "lat": 59.92536,
+    "lng": 10.759512
+  },
+  "darres gate 1a, 0175 oslo": {
+    "lat": 59.927439,
+    "lng": 10.751234
+  },
+  "østensjøveien 64, 0667 oslo": {
+    "lat": 59.907652,
+    "lng": 10.818307
+  },
+  "hoffsveien 92, 0377 oslo": {
+    "lat": 59.936898,
+    "lng": 10.683487
+  },
+  "operagata 35, 0176 oslo": {
+    "lat": 59.906751,
+    "lng": 10.75656
+  },
+  "bergensgata 5c, 0468 oslo": {
+    "lat": 59.940997,
+    "lng": 10.759628
+  },
+  "bogstadveien 64, 0366 oslo": {
+    "lat": 59.928576,
+    "lng": 10.716007
+  },
+  "thereses gate 51, 0354 oslo": {
+    "lat": 59.92586,
+    "lng": 10.730794
+  },
+  "solligata 2, 0254 oslo": {
+    "lat": 59.914372,
+    "lng": 10.720479
+  },
+  "grønlandsleiret 27, 0190 oslo": {
+    "lat": 59.911635,
+    "lng": 10.766444
+  },
+  "arbeidersamfunnets plass 1, 0183 oslo": {
+    "lat": 59.915522,
+    "lng": 10.751804
+  },
+  "bogstadveien 50, 0366 oslo": {
+    "lat": 59.927439,
+    "lng": 10.718818
+  },
+  "skedsmogata 25, 0655 oslo": {
+    "lat": 59.913719,
+    "lng": 10.786666
+  },
+  "frognerveien 12b, 0263 oslo": {
+    "lat": 59.916398,
+    "lng": 10.713137
+  },
+  "sannergata 1b, 0557 oslo": {
+    "lat": 59.927691,
+    "lng": 10.755953
+  },
+  "rådhusgata 27, 0158 oslo": {
+    "lat": 59.91111,
+    "lng": 10.736143
+  },
+  "vogts gate 64, 0477 oslo": {
+    "lat": 59.936147,
+    "lng": 10.765707
+  },
+  "toftes gate 41a, 0552 oslo": {
+    "lat": 59.924381,
+    "lng": 10.760985
+  },
+  "arnljot gellines vei 41 b, 0657 oslo": {
+    "lat": 59.9055601,
+    "lng": 10.7959479
+  },
+  "keysers gate 1, 0165 oslo": {
+    "lat": 59.917046,
+    "lng": 10.743853
+  },
+  "brugata 5, 0186 oslo": {
+    "lat": 59.914063,
+    "lng": 10.755296
+  },
+  "st. olavs gate 7, 0165 oslo": {
+    "lat": 59.91824,
+    "lng": 10.741859
+  },
+  "toftes gate 69, 0552 oslo": {
+    "lat": 59.921543,
+    "lng": 10.761013
+  },
+  "alnafetgata 1b, 0192 oslo": {
+    "lat": 59.9025839,
+    "lng": 10.772044
+  },
+  "møllergata 12, 0179 oslo": {
+    "lat": 59.914584,
+    "lng": 10.747373
+  },
+  "storgata 36j, 0182 oslo": {
+    "lat": 59.915343,
+    "lng": 10.756195
+  },
+  "schweigaards gate 57, 0656 oslo": {
+    "lat": 59.908168,
+    "lng": 10.769691
+  },
+  "vogts gate 43, 0474 oslo": {
+    "lat": 59.933476,
+    "lng": 10.763881
+  },
+  "møllergata 23 - 25, 0179 oslo": {
+    "lat": 59.9151238,
+    "lng": 10.7480665
+  },
+  "dronning eufemias gate 14, 0191 oslo": {
+    "lat": 59.908438,
+    "lng": 10.758252
+  },
+  "oslo gate 13, 0192 oslo": {
+    "lat": 59.906176,
+    "lng": 10.7676738
+  },
+  "prinsens gate 8, 0152 oslo": {
+    "lat": 59.910696,
+    "lng": 10.745916
+  },
+  "arendalsgata 18, 0463 oslo": {
+    "lat": 59.937744,
+    "lng": 10.755751
+  },
+  "elisenbergveien 22, 0265 oslo": {
+    "lat": 59.918934,
+    "lng": 10.706107
+  },
+  "karl johans gate 45, 0162 oslo": {
+    "lat": 59.9145752,
+    "lng": 10.7366338
+  },
+  "kristiansands gate 2, 0463 oslo": {
+    "lat": 59.938268,
+    "lng": 10.752807
+  },
+  "ljabruveien 87, 1266 oslo": {
+    "lat": 59.849358,
+    "lng": 10.801541
+  },
+  "kristian ivs gate 9, 0164 oslo": {
+    "lat": 59.915332,
+    "lng": 10.738987
+  },
+  "kristian ivs gate 8, 0164 oslo": {
+    "lat": 59.915211,
+    "lng": 10.738641
+  },
+  "kristian augusts gate 12, 0164 oslo": {
+    "lat": 59.916241,
+    "lng": 10.73891
+  },
+  "nedre slottsgate 2c, 0153 oslo": {
+    "lat": 59.909426,
+    "lng": 10.740127
+  },
+  "hallings gate 3, 0170": {
+    "lat": 59.922432,
+    "lng": 10.739359
+  },
+  "thorvald meyers gate 30, 0555 oslo": {
+    "lat": 59.925202,
+    "lng": 10.759346
+  },
+  "st. halvards gate 2, 0192 oslo": {
+    "lat": 59.905332,
+    "lng": 10.768326
+  },
+  "olav vs gate 1, 0161 oslo": {
+    "lat": 59.9139285,
+    "lng": 10.7323856
+  },
+  "sinsenveien 6, 0572 oslo": {
+    "lat": 59.929556,
+    "lng": 10.781587
+  },
+  "thorvald meyers gate 30b, 0555 oslo": {
+    "lat": 59.925019,
+    "lng": 10.759519
+  },
+  "thorvald meyers gate 70, 0552 oslo": {
+    "lat": 59.920221,
+    "lng": 10.759762
+  },
+  "tordenskiolds gate 2, 0160 oslo": {
+    "lat": 59.913021,
+    "lng": 10.736523
+  },
+  "ullevålsveien 68, 0454 oslo": {
+    "lat": 59.931501,
+    "lng": 10.73616
+  },
+  "opplandgata 19, 0657 oslo": {
+    "lat": 59.9064925,
+    "lng": 10.7855013
+  },
+  "fredensborgveien 22a, 0177 oslo": {
+    "lat": 59.918547,
+    "lng": 10.747849
+  },
+  "ullevålsveien 9a, 0165 oslo": {
+    "lat": 59.919516,
+    "lng": 10.743213
+  },
+  "innspurten 16 f, 0663 oslo": {
+    "lat": 59.917147,
+    "lng": 10.806262
+  },
+  "københavngata 18, 0566 oslo": {
+    "lat": 59.928184,
+    "lng": 10.768297
+  },
+  "grenseveien 50, 0579 oslo": {
+    "lat": 59.923566,
+    "lng": 10.792788
+  },
+  "pilestredet 60, 0167 oslo": {
+    "lat": 59.925008,
+    "lng": 10.731263
+  },
+  "hausmanns gate 31 c, 0182 oslo": {
+    "lat": 59.917837,
+    "lng": 10.753787
+  },
+  "thorvald meyers gate 25, 0555 oslo": {
+    "lat": 59.927023,
+    "lng": 10.758888
+  },
+  "klingenberggata 4, 0161 oslo": {
+    "lat": 59.91376,
+    "lng": 10.734031
+  },
+  "trondheimsveien 2, 0560 oslo": {
+    "lat": 59.918713,
+    "lng": 10.761704
+  },
+  "youngstorget 2a, 0181 oslo": {
+    "lat": 59.9148776,
+    "lng": 10.7490121
+  },
+  "hagegata 27, 0653 oslo": {
+    "lat": 59.914124,
+    "lng": 10.775054
+  },
+  "waldemar thranes gate 1a, 0171 oslo": {
+    "lat": 59.923054,
+    "lng": 10.739195
+  },
+  "chateau neuf, 0369 oslo": {
+    "lat": 59.9324844,
+    "lng": 10.7125754
+  },
+  "karoline kristiansens vei 9, 0661 oslo": {
+    "lat": 59.914151,
+    "lng": 10.796931
+  },
+  "olaf ryes plass 11, 0552 oslo": {
+    "lat": 59.9228559,
+    "lng": 10.7591454,
+    "approximate": true
+  },
+  "maridalsveien 10, 0178 oslo": {
+    "lat": 59.920822,
+    "lng": 10.751064
+  },
+  "klingenberggata 5, 0161 oslo": {
+    "lat": 59.913608,
+    "lng": 10.732172
+  },
+  "torshovgata 33, 0476 oslo": {
+    "lat": 59.932835,
+    "lng": 10.768162
+  },
+  "jernbanetorget 1, 0154 oslo": {
+    "lat": 59.910875,
+    "lng": 10.750737
+  },
+  "torshovgata 5, 0476 oslo": {
+    "lat": 59.933728,
+    "lng": 10.762937
+  },
+  "pilestredet 27, 0164 oslo": {
+    "lat": 59.917595,
+    "lng": 10.738354
+  },
+  "vulkan 9, 0178 oslo": {
+    "lat": 59.922571,
+    "lng": 10.752371
+  },
+  "thorvald meyers gate 36a, 0555 oslo": {
+    "lat": 59.924205,
+    "lng": 10.759401
+  },
+  "rosenkrantz' gate 7, 0164 oslo": {
+    "lat": 59.91466,
+    "lng": 10.73956
+  },
+  "wergelandsveien 29, 0167 oslo": {
+    "lat": 59.920275,
+    "lng": 10.728566
+  },
+  "frognerveien 33, 0263 oslo": {
+    "lat": 59.918953,
+    "lng": 10.710072
+  },
+  "ruseløkkveien 14, 0251 oslo": {
+    "lat": 59.913499,
+    "lng": 10.728459
+  },
+  "thorvald meyers gate 11, 0555 oslo": {
+    "lat": 59.929103,
+    "lng": 10.758497
+  },
+  "thorvald meyers gate 85, 0550 oslo": {
+    "lat": 59.919288,
+    "lng": 10.759051
+  },
+  "bernt ankers gate 25, 0179 oslo": {
+    "lat": 59.916423,
+    "lng": 10.751258
+  },
+  "torggata 8, 0181 oslo": {
+    "lat": 59.914076,
+    "lng": 10.747739
+  },
+  "mariboes gate 7b, 0183 oslo": {
+    "lat": 59.916379,
+    "lng": 10.750812
+  },
+  "holbergs plass 30, 0166 oslo": {
+    "lat": 59.9192503,
+    "lng": 10.7343572
+  },
+  "ballplassveien 2, 1181 oslo": {
+    "lat": 59.897673,
+    "lng": 10.78215
+  },
+  "ruseløkkveien 3, 0251 oslo": {
+    "lat": 59.914243,
+    "lng": 10.728986
+  },
+  "josefines gate 16, 0351 oslo": {
+    "lat": 59.923494,
+    "lng": 10.727571
+  },
+  "waldemar thranes gate 70, 0173 oslo": {
+    "lat": 59.928113,
+    "lng": 10.749176
+  },
+  "thorvald meyers gate 78, 0550 oslo": {
+    "lat": 59.918946,
+    "lng": 10.759745
+  },
+  "kongsveien 94, 1177 oslo": {
+    "lat": 59.881927,
+    "lng": 10.784219
+  },
+  "kronprinsesse märthas plass 1, 0160 oslo": {
+    "lat": 59.912771,
+    "lng": 10.732951
+  },
+  "grønlandsleiret 61b, 0190 oslo": {
+    "lat": 59.909758,
+    "lng": 10.767986
+  },
+  "trondheimsveien 16a, 0560 oslo": {
+    "lat": 59.91976,
+    "lng": 10.765391
+  },
+  "thereses gate 28, 0354 oslo": {
+    "lat": 59.928408,
+    "lng": 10.732629
+  },
+  "nordstrandveien 32, 1163 oslo": {
+    "lat": 59.8611878,
+    "lng": 10.7960607
+  },
+  "københavngata 2, 0553 oslo": {
+    "lat": 59.925128,
+    "lng": 10.762615
+  },
+  "akershusstranda 25, 0150 oslo": {
+    "lat": 59.901814,
+    "lng": 10.741166
+  },
+  "youngs gate 6, 0181 oslo": {
+    "lat": 59.914675,
+    "lng": 10.750686
+  },
+  "thorvald meyers gate 63, 0552 oslo": {
+    "lat": 59.921882,
+    "lng": 10.759135
+  },
+  "markveien 58, 0550 oslo": {
+    "lat": 59.919076,
+    "lng": 10.757505
+  },
+  "kristian augusts gate 7a, 0164 oslo": {
+    "lat": 59.916214,
+    "lng": 10.739588
+  },
+  "st. olavs plass 2, 0165 oslo": {
+    "lat": 59.918197,
+    "lng": 10.740372
+  },
+  "torggata 35, 0183 oslo": {
+    "lat": 59.917298,
+    "lng": 10.754027
+  },
+  "thorvald meyers gate 45, 0555 oslo": {
+    "lat": 59.924301,
+    "lng": 10.758905
+  },
+  "maridalsveien 2, 0178 oslo": {
+    "lat": 59.919546,
+    "lng": 10.751113
+  },
+  "torggata 16, 0181 oslo": {
+    "lat": 59.915849,
+    "lng": 10.750834
+  },
+  "drammensveien 130, 0277 oslo": {
+    "lat": 59.921455,
+    "lng": 10.688035
+  },
+  "munkedamsveien 29, 0251 oslo": {
+    "lat": 59.91217,
+    "lng": 10.726725
+  },
+  "seilduksgata 23, 0553 oslo": {
+    "lat": 59.925344,
+    "lng": 10.760857
+  },
+  "mariboes gate 4, 0183 oslo": {
+    "lat": 59.916447,
+    "lng": 10.750225
+  },
+  "maridalsveien 23, 0175 oslo": {
+    "lat": 59.923593,
+    "lng": 10.751788
+  },
+  "thorvald meyers gate 70a, 0552 oslo": {
+    "lat": 59.920162,
+    "lng": 10.759629
+  },
+  "torggata 17b, 0183 oslo": {
+    "lat": 59.916183,
+    "lng": 10.751991
+  },
+  "olaf ryes plass 12, 0552 oslo": {
+    "lat": 59.9228358,
+    "lng": 10.7591969,
+    "approximate": true
+  },
+  "karl johans gate 35, 0162 oslo": {
+    "lat": 59.91413,
+    "lng": 10.738209
+  },
+  "olaf ryes plass 10, 0552 oslo": {
+    "lat": 59.9228559,
+    "lng": 10.7591454,
+    "approximate": true
+  },
+  "waldemar thranes gate 8, 0171 oslo": {
+    "lat": 59.923402,
+    "lng": 10.739374
+  },
+  "bernt ankers gate 21, 0181 oslo": {
+    "lat": 59.916348,
+    "lng": 10.751372
+  },
+  "fredensborgveien 17a, 0177 oslo": {
+    "lat": 59.918341,
+    "lng": 10.747905
+  },
+  "møllergata 32, 0179 oslo": {
+    "lat": 59.916902,
+    "lng": 10.750051
+  },
+  "bøgata 21, 0655 oslo": {
+    "lat": 59.91373,
+    "lng": 10.781007
+  },
+  "nylandsveien 28, 0150 sukkerbiten": null,
+  "badstugata 9, 0183 oslo": {
+    "lat": 59.916229,
+    "lng": 10.750888
+  },
+  "langkaia 1, 0150 oslo": {
+    "lat": 59.907603,
+    "lng": 10.746881
+  },
+  "thorvald meyers gate 81, 0552 oslo": {
+    "lat": 59.920352,
+    "lng": 10.759193
+  },
+  "thorvald meyers gate 33 b, 0555 oslo": {
+    "lat": 59.925997,
+    "lng": 10.758995
+  },
+  "brenneriveien 9c, 0182 oslo": {
+    "lat": 59.9205855,
+    "lng": 10.7528949
+  },
+  "korsgata 31a, 0552 oslo": {
+    "lat": 59.919954,
+    "lng": 10.758925
+  },
+  "hegdehaugsveien 26, 0352 oslo": {
+    "lat": 59.921143,
+    "lng": 10.727395
+  },
+  "torggata 32, 0183 oslo": {
+    "lat": 59.917189,
+    "lng": 10.753413
+  },
+  "hagegata 20, 0653 oslo": {
+    "lat": 59.9122327,
+    "lng": 10.7779763
+  },
+  "thorvald meyers gate 80, 0550 oslo": {
+    "lat": 59.918643,
+    "lng": 10.759571
+  },
+  "hagegata 22, 0653 oslo": {
+    "lat": 59.914421,
+    "lng": 10.775439
+  },
+  "nordre gate 24, 0551 oslo": {
+    "lat": 59.92116,
+    "lng": 10.758499
+  },
+  "thorvald meyers gate 56b, 0552 oslo": {
+    "lat": 59.922085,
+    "lng": 10.759414
+  },
+  "st. halvards gate 33, 0192 oslo": {
+    "lat": 59.906037,
+    "lng": 10.774753
+  },
+  "olaf ryes plass 9, 0552 oslo": {
+    "lat": 59.9228559,
+    "lng": 10.7591454,
+    "approximate": true
+  },
+  "vulkan 4, 0182 oslo": {
+    "lat": 59.921437,
+    "lng": 10.752148
+  },
+  "bentsebrugata 31d, 0469 oslo": {
+    "lat": 59.939465,
+    "lng": 10.759332
+  },
+  "nordre gate 2, 0551 oslo": {
+    "lat": 59.922147,
+    "lng": 10.754104
+  },
+  "niels juels gate 31, 0256 oslo": {
+    "lat": 59.91678,
+    "lng": 10.714861
+  },
+  "tullins gate 2, 0166 oslo": {
+    "lat": 59.918756,
+    "lng": 10.734766
+  },
+  "bøgata 10, 0655 oslo": {
+    "lat": 59.911929,
+    "lng": 10.780678
+  },
+  "kristian augusts gate 14, 0164 oslo": {
+    "lat": 59.916326,
+    "lng": 10.738592
+  },
+  "søndre gate 12, 0550 oslo": {
+    "lat": 59.918797,
+    "lng": 10.758828
+  },
+  "storgata 7, 0155 oslo": {
+    "lat": 59.913255,
+    "lng": 10.748662
+  },
+  "tjuvholmen allé 4, 0252 oslo": {
+    "lat": 59.906561,
+    "lng": 10.719871
+  },
+  "gabels gate 47, 0262 oslo": {
+    "lat": 59.917497,
+    "lng": 10.7115
+  },
+  "youngstorget 3, 0181 oslo": {
+    "lat": 59.914277,
+    "lng": 10.749149
+  },
+  "møllergata 38a, 0172 oslo": {
+    "lat": 59.917669,
+    "lng": 10.750297
+  },
+  "skovveien 15, 0257 oslo": {
+    "lat": 59.917812,
+    "lng": 10.718403
+  },
+  "maridalsveien 153, 0461 oslo": {
+    "lat": 59.937536,
+    "lng": 10.756509
+  },
+  "thorvald meyers gate 26a, 0555 oslo": {
+    "lat": 59.926259,
+    "lng": 10.7591302
+  },
+  "youngstorget 1, 0181 oslo": {
+    "lat": 59.914781,
+    "lng": 10.75012
+  },
+  "vulkan 26, 0178 oslo": {
+    "lat": 59.922472,
+    "lng": 10.751281
+  },
+  "harbitzalléen 3, 0275 oslo": {
+    "lat": 59.924485,
+    "lng": 10.67411
+  },
+  "sagveien 23a, 0459 oslo": {
+    "lat": 59.930992,
+    "lng": 10.756271
+  },
+  "christian krohgs gate 15, 0186 oslo": {
+    "lat": 59.914729,
+    "lng": 10.758041
+  },
+  "rådhusgata 30, 0151 oslo": {
+    "lat": 59.909969,
+    "lng": 10.739762
+  },
+  "helgesens gate 66, 0558 oslo": {
+    "lat": 59.922714,
+    "lng": 10.769484
+  },
+  "stranden 1, 0250 oslo": {
+    "lat": 59.910504,
+    "lng": 10.728505
+  },
+  "stranden 71, 0250 oslo": {
+    "lat": 59.908798,
+    "lng": 10.724357
+  },
+  "rådhusbrygge 2, 0160 oslo": {
+    "lat": 59.9100351,
+    "lng": 10.7328589
+  },
+  "skippergata 24, 0154 oslo": {
+    "lat": 59.910655,
+    "lng": 10.747892
+  },
+  "bogstadveien 53, 0366 oslo": {
+    "lat": 59.929387,
+    "lng": 10.714385
+  },
+  "rådhusgata 28, 0151 oslo": {
+    "lat": 59.909831,
+    "lng": 10.740738
+  },
+  "bergensgata 2, 0468 oslo": {
+    "lat": 59.939992,
+    "lng": 10.758913
+  },
+  "anne-cath. vestlys plass 1, 0150 oslo": {
+    "lat": 59.9090099,
+    "lng": 10.7504048
+  },
+  "markveien 67a, 0550 oslo": {
+    "lat": 59.918883,
+    "lng": 10.757044
+  },
+  "akershusstranda 13, skur 34, 0150 oslo": null,
+  "kongsveien 15, 0193 oslo": {
+    "lat": 59.899484,
+    "lng": 10.761656
+  },
+  "valkyriegata 21c, 0366 oslo": {
+    "lat": 59.9283634,
+    "lng": 10.7181262
+  },
+  "thorvald meyers gate 61, 0552 oslo": {
+    "lat": 59.922056,
+    "lng": 10.759149
+  },
+  "nedre slottsgate 24, 0159 oslo": {
+    "lat": 59.913169,
+    "lng": 10.743694
+  },
+  "sommerrogata 1, 0255 oslo": {
+    "lat": 59.915245,
+    "lng": 10.719612
+  },
+  "tordenskiolds gate 19, 0160 oslo": {
+    "lat": 59.911731,
+    "lng": 10.734925
+  },
+  "henrik ibsens gate 100, 0255 oslo": {
+    "lat": 59.914391,
+    "lng": 10.718977
+  },
+  "kjølberggata 21, 0653 oslo": {
+    "lat": 59.911138,
+    "lng": 10.778386
+  },
+  "ruseløkkveien 6, 0251 oslo": {
+    "lat": 59.91469,
+    "lng": 10.731137
+  },
+  "karl johans gate 25, 0159 oslo": {
+    "lat": 59.913312,
+    "lng": 10.74101
+  },
+  "torggata 9b, 0181 oslo": {
+    "lat": 59.913926,
+    "lng": 10.748215
+  },
+  "rostockgata 64, 0194 oslo": {
+    "lat": 59.906162,
+    "lng": 10.760164
+  },
+  "kirkeveien 51, 0368 oslo": {
+    "lat": 59.9276636,
+    "lng": 10.7137949
+  },
+  "olav vs gate 2, 0161 oslo": {
+    "lat": 59.913911,
+    "lng": 10.732993
+  },
+  "nedre gate 8, 0551 oslo": {
+    "lat": 59.919846,
+    "lng": 10.754791
+  },
+  "bernt ankers gate 2, 0183 oslo": {
+    "lat": 59.915093,
+    "lng": 10.753696
+  },
+  "holmens gate 4, 0250 oslo": {
+    "lat": 59.9104663,
+    "lng": 10.7265537
+  },
+  "urtegata 48, 0187 oslo": {
+    "lat": 59.913723,
+    "lng": 10.766143
+  },
+  "lilleakerveien 30, 0283 oslo": {
+    "lat": 59.920152,
+    "lng": 10.635375
+  },
+  "tevlingveien 21, 1081 oslo": {
+    "lat": 59.930126,
+    "lng": 10.868252
+  },
+  "øvrefoss 4, 0555 oslo": {
+    "lat": 59.927342,
+    "lng": 10.756489
+  },
+  "dronning mauds gate 1, 0250 oslo": {
+    "lat": 59.91253,
+    "lng": 10.729961
+  },
+  "tøyenbekken 34, 0188 oslo": {
+    "lat": 59.911363,
+    "lng": 10.761976
+  },
+  "kongens gate 5, 0552 oslo": {
+    "lat": 59.909459,
+    "lng": 10.740969
+  },
+  "behrens' gate 2, 0257 oslo": {
+    "lat": 59.916441,
+    "lng": 10.716625
+  },
+  "bøkkerveien 4, 0579 oslo": {
+    "lat": 59.92698,
+    "lng": 10.793998
+  },
+  "frognerveien 2, 0257 oslo": {
+    "lat": 59.915262,
+    "lng": 10.717108
+  },
+  "bogstadveien 66, 0366 oslo": {
+    "lat": 59.92866,
+    "lng": 10.715725
+  },
+  "vetlandsveien 111, 0686 oslo": {
+    "lat": 59.893014,
+    "lng": 10.841544
+  },
+  "holmens gate 3, 0250 oslo": {
+    "lat": 59.910709,
+    "lng": 10.726566
+  },
+  "thorvald meyers gate 33d, 0555 oslo": {
+    "lat": 59.925704,
+    "lng": 10.7588
+  },
+  "trondheimsveien 113, 0571 oslo": {
+    "lat": 59.926443,
+    "lng": 10.777901
+  },
+  "grønlandsleiret 17a, 0190 oslo": {
+    "lat": 59.912137,
+    "lng": 10.764557
+  },
+  "frognerveien 5, 0256 oslo": {
+    "lat": 59.915946,
+    "lng": 10.716682
+  },
+  "fjordalléen 2, 0250 oslo": {
+    "lat": 59.909047,
+    "lng": 10.725175
+  },
+  "holbergs plass 4, 0166 oslo": {
+    "lat": 59.919162,
+    "lng": 10.733964
+  },
+  "markveien 57, 0550 oslo": {
+    "lat": 59.919959,
+    "lng": 10.757226
+  },
+  "vitaminveien 18, 0483 oslo": {
+    "lat": 59.946692,
+    "lng": 10.772554
+  },
+  "rådhusbrygge 3, 0160 oslo": {
+    "lat": 59.9103171,
+    "lng": 10.7314667
+  },
+  "bernt ankers gate 6, 0183 oslo": {
+    "lat": 59.915917,
+    "lng": 10.752423
+  },
+  "sørengkaia 99, 0194 oslo": {
+    "lat": 59.902835,
+    "lng": 10.753342
+  },
+  "kristian ivs gate 4, 0164 oslo": {
+    "lat": 59.914897,
+    "lng": 10.739752
+  },
+  "fred olsens gate 11, 0152 oslo": {
+    "lat": 59.910486,
+    "lng": 10.748694
+  },
+  "stortingsgata 12, 0161 oslo": {
+    "lat": 59.913312,
+    "lng": 10.736879
+  },
+  "underhaugsveien 2, 0354 oslo": {
+    "lat": 59.925401,
+    "lng": 10.730386
+  },
+  "munchs gate 1, 0180 oslo": {
+    "lat": 59.915545,
+    "lng": 10.742583
+  },
+  "dronning eufemias gate 32, 0191 oslo": {
+    "lat": 59.907482,
+    "lng": 10.760381
+  },
+  "dronningens gate 27, 0154 oslo": {
+    "lat": 59.91219,
+    "lng": 10.747766
+  },
+  "ivan bjørndals gate 23, 0472 oslo": {
+    "lat": 59.938346,
+    "lng": 10.764428
+  },
+  "hegdehaugsveien 34, 0352 oslo": {
+    "lat": 59.922675,
+    "lng": 10.726311
+  },
+  "majorstuveien 41a, 0367 oslo": {
+    "lat": 59.928314,
+    "lng": 10.715439
+  },
+  "tordenskiolds gate 6b, 0160 oslo": {
+    "lat": 59.912462,
+    "lng": 10.736011
+  },
+  "nydalsveien 36, 0484 oslo": {
+    "lat": 59.949695,
+    "lng": 10.767176
+  },
+  "kirkeveien 57, 0368 oslo": {
+    "lat": 59.927927,
+    "lng": 10.71413
+  },
+  "rådhusgata 32, 0151 oslo": {
+    "lat": 59.910205,
+    "lng": 10.738916
+  },
+  "niels juels gate 31, 0257 oslo": {
+    "lat": 59.91678,
+    "lng": 10.714861
+  },
+  "karl johans gate 1, 0154 oslo": {
+    "lat": 59.911377,
+    "lng": 10.749404
+  },
+  "fridtjof nansens plass 8, 0160 oslo": {
+    "lat": 59.912402,
+    "lng": 10.735096
+  },
+  "stranden 3, 0250 oslo": {
+    "lat": 59.910171,
+    "lng": 10.727808
+  },
+  "hovedøya, 0150 oslo": {
+    "lat": 59.8990231,
+    "lng": 10.7306162
+  },
+  "youngs gate 19, 0181 oslo": {
+    "lat": 59.915117,
+    "lng": 10.750032
+  },
+  "operagata 77d, 0194 oslo": {
+    "lat": 59.906375,
+    "lng": 10.759618
+  },
+  "kongens gate 7, 0153 oslo": {
+    "lat": 59.909921,
+    "lng": 10.741405
+  },
+  "bygdøy allé 63 c, 0265 oslo": {
+    "lat": 59.918785,
+    "lng": 10.70367
+  },
+  "sørengkaia 71, 0191 oslo": {
+    "lat": 59.903093,
+    "lng": 10.753896
+  },
+  "bryggegangen 4, 0252 oslo": {
+    "lat": 59.9088592,
+    "lng": 10.7223929
+  },
+  "karl johans gate 23, 0159 oslo": {
+    "lat": 59.91286,
+    "lng": 10.742596
+  },
+  "karl johans gate 39, 0162 oslo": {
+    "lat": 59.914317,
+    "lng": 10.737646
+  },
+  "bøkkerveien 11, 0579 oslo": {
+    "lat": 59.9273897,
+    "lng": 10.7961598
+  },
+  "bogstadveien 6, 0355 oslo": {
+    "lat": 59.924352,
+    "lng": 10.724173
+  },
+  "jernbanetorget 2, 0154 oslo": {
+    "lat": 59.910765,
+    "lng": 10.749568
+  },
+  "frognerstranda 4, 0250 oslo": {
+    "lat": 59.9103636,
+    "lng": 10.7054633
+  },
+  "ekebergveien 230, 1166 oslo": {
+    "lat": 59.860628,
+    "lng": 10.801007
+  },
+  "darres gate 2, 0175 oslo": {
+    "lat": 59.927738,
+    "lng": 10.751692
+  },
+  "rosenkrantz' gate 4, 0159 oslo": {
+    "lat": 59.915142,
+    "lng": 10.740462
+  },
+  "sandakerveien 100a, 0484 oslo": {
+    "lat": 59.9491415,
+    "lng": 10.7693595
+  },
+  "rostockgata 42, 0194 oslo": {
+    "lat": 59.90644,
+    "lng": 10.760081
+  },
+  "stortingsgata 4, 0158 oslo": {
+    "lat": 59.912923,
+    "lng": 10.738468
+  },
+  "sørkedalsveien 81, 0376 oslo": {
+    "lat": 59.937891,
+    "lng": 10.683136
+  },
+  "olav vs gate 4, 0161 oslo": {
+    "lat": 59.91342,
+    "lng": 10.732806
+  },
+  "bryggetorget 10, 0250 oslo": {
+    "lat": 59.909378,
+    "lng": 10.724584
+  },
+  "tordenskiolds gate 8, 0160 oslo": {
+    "lat": 59.912267,
+    "lng": 10.735822
+  },
+  "torggata 11, 0181 oslo": {
+    "lat": 59.914123,
+    "lng": 10.748279
+  },
+  "stortingsgata 20, 0161 oslo": {
+    "lat": 59.913769,
+    "lng": 10.734935
+  },
+  "bogstadveien 27, 0355 oslo": {
+    "lat": 59.926528,
+    "lng": 10.721963
+  },
+  "thorvald meyers gate 89, 0550 oslo": {
+    "lat": 59.9188,
+    "lng": 10.759222
+  },
+  "vitaminveien 9-11 0485 oslo": {
+    "lat": 59.9465364,
+    "lng": 10.7741867
+  },
+  "sognsveien 77c, 0855 oslo": {
+    "lat": 59.949923,
+    "lng": 10.736036
+  },
+  "edvard munchs plass 1, 0194 oslo": {
+    "lat": 59.906106,
+    "lng": 10.75535
+  },
+  "grønland 10, 0188 oslo": {
+    "lat": 59.913274,
+    "lng": 10.760128
+  },
+  "ekebergveien 228 b, 1162 oslo": {
+    "lat": 59.861186,
+    "lng": 10.800473
+  },
+  "karl johans gate 27, 0159 oslo": {
+    "lat": 59.913595,
+    "lng": 10.73997
+  },
+  "storgata 21-23, 0184 oslo": {
+    "lat": 59.9139426,
+    "lng": 10.7514151
+  },
+  "karl johans gate 37, 0162 oslo": {
+    "lat": 59.914197,
+    "lng": 10.737908
+  },
+  "industrigata 36, 0357 oslo": {
+    "lat": 59.92604,
+    "lng": 10.719687
+  },
+  "operagata 61d, 0194 oslo": {
+    "lat": 59.906906,
+    "lng": 10.757652
+  },
+  "tordenskiolds gate 3, 0160 oslo": {
+    "lat": 59.913131,
+    "lng": 10.736315
+  },
+  "torshovgata 2, 0476 oslo": {
+    "lat": 59.934208,
+    "lng": 10.762937
+  },
+  "dronningens gate 16, 0105 oslo": {
+    "lat": 59.909612,
+    "lng": 10.745752
+  },
+  "fridtjof nansens plass 7, 0160 oslo": {
+    "lat": 59.912606,
+    "lng": 10.735303
+  },
+  "operagata 77, 0194 oslo": {
+    "lat": 59.906375,
+    "lng": 10.759618
+  },
+  "vitaminveien 27, 0485 oslo": {
+    "lat": 59.947557,
+    "lng": 10.772025
+  },
+  "sonja henies plass 3, 0185 oslo": {
+    "lat": 59.912661,
+    "lng": 10.756214
+  },
+  "rådhusgata 19, 0158 oslo": {
+    "lat": 59.910141,
+    "lng": 10.740325
+  },
+  "henrik ibsens gate 90, 0255 oslo": {
+    "lat": 59.914573,
+    "lng": 10.719421
+  },
+  "karl johans gate 13, 0154 oslo": {
+    "lat": 59.912419,
+    "lng": 10.744666
+  },
+  "karenslyst allé 28, 0278 oslo": {
+    "lat": 59.920355,
+    "lng": 10.683067
+  },
+  "ruseløkkveien 26, 0251 oslo": {
+    "lat": 59.912559,
+    "lng": 10.726927
+  },
+  "ivan bjørndals gate 25, 0472 oslo": {
+    "lat": 59.938239,
+    "lng": 10.763706
+  },
+  "olaf ryes plass 8, 0552 oslo": {
+    "lat": 59.9228559,
+    "lng": 10.7591454,
+    "approximate": true
+  },
+  "biskop gunnerus' gate 3 ground floor, 0155 oslo": {
+    "lat": 59.912287,
+    "lng": 10.7487456
+  },
+  "møllergata 10, 0179 oslo": {
+    "lat": 59.9144,
+    "lng": 10.747041
+  },
+  "dronningens gate 26, 0154 oslo": {
+    "lat": 59.911076,
+    "lng": 10.747063
+  },
+  "jacob aalls gate 28, 0364 oslo": {
+    "lat": 59.928915,
+    "lng": 10.717852
+  },
+  "mariboes gate 2, 0179 oslo": {
+    "lat": 59.916299,
+    "lng": 10.750051
+  },
+  "operagata 1, 0194 oslo": {
+    "lat": 59.906454,
+    "lng": 10.75564
+  },
+  "sommerrogata 17, 0255 oslo": {
+    "lat": 59.914994,
+    "lng": 10.717781
+  },
+  "filipstadveien 25, 0250 oslo": {
+    "lat": 59.908679,
+    "lng": 10.710706
+  },
+  "parkveien 12, 0350 oslo": {
+    "lat": 59.920818,
+    "lng": 10.728916
+  },
+  "st. olavs gate 33, 0166 oslo": {
+    "lat": 59.917876,
+    "lng": 10.734076
+  },
+  "henrik ibsens gate 48, 0255 oslo": {
+    "lat": 59.91515,
+    "lng": 10.723794
+  },
+  "middelthuns gate 17, 0368 oslo": {
+    "lat": 59.92802,
+    "lng": 10.711988
+  },
+  "dronning eufemias gate 4, 0191 oslo": {
+    "lat": 59.909306,
+    "lng": 10.753101
+  },
+  "gressholmen, 0150 oslo": {
+    "lat": 59.8814486,
+    "lng": 10.7154125
+  },
+  "frognerveien 6, 0257 oslo": {
+    "lat": 59.915716,
+    "lng": 10.716577
+  },
+  "gimleveien 22, 0266 oslo": {
+    "lat": 59.920224,
+    "lng": 10.705522
+  },
+  "st. olavs plass 1, 0165 oslo": {
+    "lat": 59.918159,
+    "lng": 10.739833
+  },
+  "vulkan 12, 0178 oslo": {
+    "lat": 59.921653,
+    "lng": 10.751795
+  },
+  "tordenskiolds gate 5, 0160 oslo": {
+    "lat": 59.91299,
+    "lng": 10.736164
+  },
+  "ullevålsveien 43, 0171 oslo": {
+    "lat": 59.923752,
+    "lng": 10.739766
+  },
+  "operagata 6, 0150 oslo": {
+    "lat": 59.908239,
+    "lng": 10.7536
+  },
+  "biskop gunnerus gate 3, 0155 oslo": {
+    "lat": 59.912457,
+    "lng": 10.749962
+  },
+  "grensen 9, 0159 oslo": {
+    "lat": 59.9140171,
+    "lng": 10.7436036
+  },
+  "jernbanetorget 6, 0154 oslo": {
+    "lat": 59.911771,
+    "lng": 10.751553
+  },
+  "maridalsveien 9a, 0178 oslo": {
+    "lat": 59.921364,
+    "lng": 10.75152
+  },
+  "kristian ivs gate 1, 0164 oslo": {
+    "lat": 59.914918,
+    "lng": 10.740415
+  },
+  "lille stranden 10, 0252 oslo": {
+    "lat": 59.908422,
+    "lng": 10.723568
+  },
+  "tjuvholmen allé 2, 0252 oslo": {
+    "lat": 59.906619,
+    "lng": 10.719954
+  },
+  "mølleparken 6, 0459 oslo": {
+    "lat": 59.930178,
+    "lng": 10.756657
+  },
+  "prinsens gate 6a, 0152 oslo": {
+    "lat": 59.910356,
+    "lng": 10.747279
+  },
+  "frognerveien 9b, 0257 oslo": {
+    "lat": 59.916509,
+    "lng": 10.715568
+  },
+  "kirkeveien 64b, 0366 oslo": {
+    "lat": 59.92917,
+    "lng": 10.71481
+  },
+  "storgata 10, 0155 oslo": {
+    "lat": 59.913202,
+    "lng": 10.749339
+  },
+  "akershusstranda 11, 0150 oslo": {
+    "lat": 59.907896,
+    "lng": 10.733974
+  },
+  "tollbugata 15, 0152 oslo": {
+    "lat": 59.910275,
+    "lng": 10.745143
+  },
+  "munkedamsveien 100, 0270 oslo": {
+    "lat": 59.912666,
+    "lng": 10.710053
+  },
+  "mariboes gate 5a, 0183 oslo": {
+    "lat": 59.916145,
+    "lng": 10.750313
+  },
+  "storgata 27, 0184 oslo": {
+    "lat": 59.914098,
+    "lng": 10.751515
+  },
+  "sandakerveien 2, 0473 oslo": {
+    "lat": 59.930837,
+    "lng": 10.75773
+  },
+  "lørenfaret 3, 0585 oslo": {
+    "lat": 59.9306,
+    "lng": 10.799399
+  },
+  "olaf ryes plass 3, 0552 oslo": {
+    "lat": 59.9228559,
+    "lng": 10.7591454,
+    "approximate": true
+  },
+  "torggata 30, 0183 oslo": {
+    "lat": 59.917048,
+    "lng": 10.753196
+  },
+  "kristian augusts gate 11, 0164 oslo": {
+    "lat": 59.916759,
+    "lng": 10.737756
+  },
+  "stortingsgata 26, 0161 oslo": {
+    "lat": 59.914202,
+    "lng": 10.733401
+  },
+  "henrik ibsens gate 4, 0255 oslo": {
+    "lat": 59.915108,
+    "lng": 10.728458
+  },
+  "vibes gate 11a, 0365 oslo": {
+    "lat": 59.926658,
+    "lng": 10.723942
+  },
+  "bogstadveien 1, 0355 oslo": {
+    "lat": 59.924095,
+    "lng": 10.72558
+  },
+  "mariboes gate 5b, 0183 oslo": {
+    "lat": 59.916235,
+    "lng": 10.750323
+  },
+  "øvre slottsgate 3, 0157 oslo": {
+    "lat": 59.911002,
+    "lng": 10.74017
+  },
+  "landgangen 1, 0252 oslo": {
+    "lat": 59.907658,
+    "lng": 10.721052
+  },
+  "vækerøveien 207, 0751 oslo": {
+    "lat": 59.948322,
+    "lng": 10.643835
+  },
+  "tjuvholmen allé 5, 0252 oslo": {
+    "lat": 59.908467,
+    "lng": 10.722194
+  },
+  "frognerveien 67, 0266 oslo": {
+    "lat": 59.9249323,
+    "lng": 10.7070774
+  },
+  "sørengkaia 165, 0194 oslo": {
+    "lat": 59.9018685,
+    "lng": 10.7514551
+  },
+  "søndre gate 8, 0550 oslo": {
+    "lat": 59.918801,
+    "lng": 10.758278
+  },
+  "youngstorget 2, 0184 oslo": {
+    "lat": 59.914553,
+    "lng": 10.749678
+  },
+  "dronning eufemias gate 6a, 0191 oslo": {
+    "lat": 59.908957,
+    "lng": 10.754611
+  },
+  "bryggegangen 6, 0252 oslo": {
+    "lat": 59.9086675,
+    "lng": 10.721936
+  },
+  "holmens gate 2, 0250 oslo": {
+    "lat": 59.910623,
+    "lng": 10.726902
+  },
+  "vibes gate 8a, 0356 oslo": {
+    "lat": 59.926522,
+    "lng": 10.722664
+  },
+  "parkveien 29, 0350 oslo": {
+    "lat": 59.920433,
+    "lng": 10.727411
+  },
+  "stortingsgata 24 - 26, 0117 oslo": {
+    "lat": 59.9129723,
+    "lng": 10.7387867
+  },
+  "henrik ibsens gate 60c, 0255 oslo": {
+    "lat": 59.914992,
+    "lng": 10.720439
+  },
+  "josefines gate 23, 0351 oslo": {
+    "lat": 59.923094,
+    "lng": 10.725904
+  },
+  "henrik ibsens gate 60a, 0255 oslo": {
+    "lat": 59.91508,
+    "lng": 10.721928
+  }
+}

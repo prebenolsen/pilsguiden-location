@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ølkartet Oslo — billigst øl i byen</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="panel">
+    <h1>🍺 Ølkartet Oslo</h1>
+    <p class="subtitle">Billigste halvliter per utested, fra <a href="https://www.pilsguiden.no/liste/oslo" target="_blank" rel="noopener">Pilsguiden</a></p>
+
+    <div class="row">
+      <button id="locate-btn">📍 Finn meg</button>
+      <span id="locate-status"></span>
+    </div>
+
+    <div class="row price-filter">
+      <label>Pris per halvliter: <strong id="price-range-label"></strong></label>
+      <div class="slider" id="slider">
+        <div class="slider-track"></div>
+        <div class="slider-range" id="slider-range"></div>
+        <input type="range" id="slider-min" step="1" />
+        <input type="range" id="slider-max" step="1" />
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-label">Billig</span>
+      <div class="legend-gradient"></div>
+      <span class="legend-label">Dyrt</span>
+    </div>
+
+    <div class="row stats">
+      <span id="visible-count"></span>
+    </div>
+
+    <div class="row stale-note">
+      <span class="dot stale-dot"></span> = pris sjekket for 14+ dager siden
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "pilsguiden-location",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Map of Oslo bars with the cheapest beer prices, scraped from pilsguiden.no",
+  "scripts": {
+    "scrape": "node scripts/scrape.mjs",
+    "scrape:overwrite": "node scripts/scrape.mjs --overwrite",
+    "serve": "node scripts/serve.mjs"
+  }
+}
