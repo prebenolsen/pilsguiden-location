@@ -146,7 +146,7 @@ function setupLocate() {
         userMarker = L.marker([latitude, longitude], {
           icon: L.divIcon({ className: "user-location-marker", iconSize: [16, 16] }),
         }).addTo(map);
-        map.setView([latitude, longitude], 15);
+        map.setView([latitude, longitude], 17);
       },
       (err) => {
         status.textContent = err.code === 1 ? "Tilgang avslått" : "Fant ikke posisjon";
