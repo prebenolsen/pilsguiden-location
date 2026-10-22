@@ -232,9 +232,16 @@ html, body {
 }
 
 .bar-popup .address {
+  display: block;
   color: #555;
   font-size: 12px;
   margin: 2px 0 6px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bar-popup .address:hover {
+  text-decoration: underline;
 }
 
 .bar-popup .meta {

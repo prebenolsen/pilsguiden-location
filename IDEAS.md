@@ -7,7 +7,7 @@ prioritized. Nothing here is implemented yet — pick and choose.
 ## 🎯 Priorities at a glance
 
 ### Quick wins (small effort, high value)
-- [ ] Clickable addresses that open Google/Apple Maps for directions
+- [x] Clickable addresses that open Google/Apple Maps for directions
       (fall back to a Google search for the bar name + address)
 - [ ] Show `validTo` in the popup — data's already scraped, just not rendered
 - [ ] Dynamic min/max kr labels on the legend gradient
@@ -51,11 +51,13 @@ use. Leaflet supports this natively via `L.control.layers` with multiple
 free tile providers (OSM standard, CartoDB Positron/Dark Matter, Esri
 satellite, etc.) — each has its own attribution requirement to keep.
 
-**Clickable addresses → directions.** Tapping/clicking a bar's address
-should open native directions: `https://maps.apple.com/?q=` on iOS/Safari,
-`https://www.google.com/maps/search/?api=1&query=` elsewhere, and if
-neither resolves to something useful, fall back to a plain Google search
-for `"<bar name> <address>"`.
+**Clickable addresses → directions.** ✅ Implemented. The address in each
+popup is now a link: `https://maps.apple.com/?q=` on iOS/iPadOS,
+`https://www.google.com/maps/search/?api=1&query=` elsewhere, both built
+from the bar's name + address text (letting Apple/Google do their own
+geocoding rather than relying on our possibly-approximate lat/lng — see
+the Olaf Ryes plass note in the scraper). Falls back to a plain Google
+search if a bar somehow has no address at all.
 
 **Optimize for mobile use.** ✅ Implemented. This is the device most people will actually
 pull the map up on while already out — standing outside a bar deciding

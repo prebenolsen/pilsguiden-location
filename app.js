@@ -13,6 +13,29 @@ function isMobile() {
   return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
 }
 
+// iPadOS 13+ identifies as "MacIntel" in the UA string, so a touch check
+// is needed to tell it apart from an actual Mac.
+function isApplePlatform() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+
+// Point directions at the address text itself (not our geocoded lat/lng):
+// Apple/Google's own geocoding of a well-formed street address is at least
+// as good as what we got from Nominatim, and for the handful of bars we
+// only approximately placed, it's likely better.
+function directionsUrl(bar) {
+  if (!bar.address) {
+    return `https://www.google.com/search?q=${encodeURIComponent(bar.name)}`;
+  }
+  const query = encodeURIComponent(`${bar.name}, ${bar.address}`);
+  return isApplePlatform()
+    ? `https://maps.apple.com/?q=${query}`
+    : `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+
 const map = L.map("map", { zoomControl: true }).setView(OSLO_CENTER, 12);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -58,7 +81,9 @@ function popupHtml(bar) {
     <div class="bar-popup">
       <h3>${escapeHtml(bar.name)}</h3>
       <div class="price">${bar.pricePerHalfLiter} kr / 0,5L</div>
-      <div class="address">${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}</div>
+      <a class="address" href="${directionsUrl(bar)}" target="_blank" rel="noopener" title="Få veibeskrivelse">
+        📍 ${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}
+      </a>
       <div class="meta">
         ${bar.brewery ? `Bryggeri: ${escapeHtml(bar.brewery)}<br>` : ""}
         Pris sjekket: ${formatDate(bar.priceChecked)}
