@@ -244,7 +244,6 @@ function setupSlider() {
   const maxInput = document.getElementById("slider-max");
   const rangeEl = document.getElementById("slider-range");
   const label = document.getElementById("price-range-label");
-  const minValueEl = document.getElementById("min-value");
   const maxValueEl = document.getElementById("max-value");
 
   [minInput, maxInput].forEach((input) => {
@@ -285,7 +284,6 @@ function setupSlider() {
     }
 
     label.textContent = `${lo} – ${hi} kr`;
-    minValueEl.textContent = `${minInput.value} kr`;
     maxValueEl.textContent = `${maxInput.value} kr`;
     saveStored(STORAGE_KEYS.filter, { min: Number(minInput.value), max: Number(maxInput.value) });
     renderMarkers(lo, hi);
