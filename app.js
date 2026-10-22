@@ -94,6 +94,59 @@ function isStale(bar) {
   return daysSince(bar.priceChecked) >= STALE_DAYS;
 }
 
+// default_price === false means this is a time-limited (happy-hour)
+// price rather than the bar's everyday one - confirmed against the
+// source data: it's always paired with "Gyldig frem til kl X" text.
+function isHappyHour(bar) {
+  return bar.defaultPrice === false;
+}
+
+// Oslo's current wall-clock minute-of-day, independent of the visitor's
+// own timezone - "kl 23" in the source data always means 23:00 in Oslo.
+function osloMinutesNow() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Oslo",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+  const hour = Number(parts.find((p) => p.type === "hour").value);
+  const minute = Number(parts.find((p) => p.type === "minute").value);
+  return hour * 60 + minute;
+}
+
+// Parses "Gyldig frem til kl 23" (or "kl 23:30") into a minute-of-day.
+// Returns null for anything else ("Prisen gjelder til stengetid" etc.) -
+// we can't compute a countdown without a concrete hour.
+function parseValidToMinuteOfDay(validTo) {
+  const match = /kl\.?\s*(\d{1,2})(?:[:.](\d{2}))?/i.exec(validTo || "");
+  if (!match) return null;
+  const hour = Number(match[1]);
+  const minute = Number(match[2] || 0);
+  if (hour > 23 || minute > 59) return null;
+  return hour * 60 + minute;
+}
+
+// Minutes until a happy-hour bar's price reverts to normal, today, Oslo
+// time. Null if not a happy-hour bar, the cutoff can't be parsed, or
+// today's cutoff has already passed (stale snapshot - don't guess).
+function minutesUntilPriceChange(bar) {
+  if (!isHappyHour(bar)) return null;
+  const cutoff = parseValidToMinuteOfDay(bar.validTo);
+  if (cutoff === null) return null;
+  const remaining = cutoff - osloMinutesNow();
+  return remaining > 0 ? remaining : null;
+}
+
+// "2t" once under 2h left, exact minutes once under 1h - null (no badge)
+// otherwise, per the "nobody cares yet if it's 3 hours away" call.
+function priceChangeBadge(bar) {
+  const remaining = minutesUntilPriceChange(bar);
+  if (remaining === null || remaining > 120) return null;
+  if (remaining > 60) return "2t";
+  return `${remaining}m`;
+}
+
 // Green (cheap) -> yellow (mid) -> red (expensive), interpolated in HSL hue space.
 // lo/hi are the currently visible price range, so the scale always stretches
 // across whatever the filter/slider is showing right now.
@@ -117,12 +170,19 @@ function priceDotIcon(bar, color, stale) {
   const borderColor = stale ? "#333" : "#1a1a1a";
   const borderStyle = stale ? "dashed" : "solid";
   const borderWidth = stale ? 2 : 1;
+  const happyHour = isHappyHour(bar);
+  const badge = priceChangeBadge(bar);
+
+  // Shape is a second, color-independent channel: rounded squares mark a
+  // time-limited (happy-hour) price, circles mark the everyday price.
+  const shapeClass = happyHour ? " price-dot--square" : "";
+  const badgeHtml = badge ? `<span class="price-dot-badge" title="Prisen stiger om ${badge}">${badge}</span>` : "";
 
   // The dot's own opacity stays at 1 always - only the fill color (passed
   // in with its own alpha, see priceColor) fades, so the number and
   // border stay fully legible no matter how faded the fill is.
   const html = `
-    <div class="price-dot" style="
+    <div class="price-dot${shapeClass}" style="
       width: ${diameter}px;
       height: ${diameter}px;
       font-size: ${fontSize}px;
@@ -130,7 +190,7 @@ function priceDotIcon(bar, color, stale) {
       border-color: ${borderColor};
       border-style: ${borderStyle};
       border-width: ${borderWidth}px;
-    ">${Math.round(bar.pricePerHalfLiter)}</div>
+    ">${Math.round(bar.pricePerHalfLiter)}${badgeHtml}</div>
   `;
 
   return L.divIcon({
@@ -151,9 +211,14 @@ function popupHtml(bar) {
   const staleHtml = stale
     ? `<div class="stale-warning">⚠ Pris sjekket for ${Math.floor(daysSince(bar.priceChecked))} dager siden – kan være utdatert</div>`
     : "";
-  const isTimeLimited = bar.validTo && !/alltid gyldig/i.test(bar.validTo);
+  const happyHour = isHappyHour(bar);
+  const remaining = minutesUntilPriceChange(bar);
+  const countdownHtml =
+    remaining !== null
+      ? ` – stiger til vanlig pris om ${remaining > 60 ? `${Math.floor(remaining / 60)}t ${remaining % 60}min` : `${remaining} min`}`
+      : "";
   const validToHtml = bar.validTo
-    ? `<div class="valid-to${isTimeLimited ? " time-limited" : ""}">${isTimeLimited ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}</div>`
+    ? `<div class="valid-to${happyHour ? " time-limited" : ""}">${happyHour ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}${countdownHtml}</div>`
     : "";
   return `
     <div class="bar-popup">

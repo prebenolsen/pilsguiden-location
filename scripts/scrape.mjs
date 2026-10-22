@@ -177,6 +177,11 @@ async function main() {
       actualSize: bar.size,
       priceChecked: bar.price_checked,
       validTo: bar.valid_to,
+      // false = this is a time-limited (e.g. happy-hour) price, not the
+      // everyday one. Confirmed against the source: default_price is
+      // always true for "Prisen er alltid gyldig" / "Prisen gjelder
+      // utenom happy hour", and always false for "Gyldig frem til kl X".
+      defaultPrice: bar.default_price,
       lat: coords.lat,
       lng: coords.lng,
       approxLocation: coords.approximate || false,

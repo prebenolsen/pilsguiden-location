@@ -17,9 +17,8 @@ prioritized. Nothing here is implemented yet — pick and choose.
 ### Medium effort
 - [ ] Map-type switcher (standard OSM / satellite / dark, etc.)
 - [ ] Marker clustering for the sentrum/Grünerløkka density problem
-- [ ] Capture `default_price` and badge "happy hour" vs. "always this price"
-      (see "Pass 3 — on marker shapes" for a shape-based take on this: squares for
-      happy-hour bars, circles for standard pricing)
+- [x] Capture `default_price` and badge "happy hour" vs. "always this price"
+      (shipped as shapes — see "Pass 3 — on marker shapes")
 - [ ] Brewery filter (dropdown or chip list)
 - [x] Mobile optimization pass (see below — layout, sharing an address, slider orientation, step buttons)
 - [ ] Colorblind-safe palette option / redundant price cue
@@ -124,17 +123,17 @@ without panning around a map.
 
 ## Pass 2 — as someone who really loves beer
 
-**Happy-hour pricing is already scraped and thrown away.** 🟡 Partially
-implemented: `valid_to` now shows in the popup (e.g. *"🕒 Gyldig frem til
-kl 23"* vs. *"✅ Prisen er alltid gyldig"*), so the fact is no longer
-hidden. Still open: actually parsing the "kl 23" part and comparing it to
-the current time to say "this happy-hour price is/isn't active right
-now" rather than just displaying the raw text.
+**Happy-hour pricing is already scraped and thrown away.** ✅ Implemented
+in full. `default_price` is now captured by the scraper and drives the
+dot's shape (square = happy hour, circle = standard — see Pass 3), and
+`valid_to`'s "kl X" is parsed against the current Oslo time: within 2h of
+the price reverting, the dot gets a small corner badge — "2t" between
+1-2h left, exact minutes (e.g. "50m") under 1h, nothing once it's closer
+than that but unparseable/already-past (a stale snapshot shouldn't guess).
+The popup spells it out too: "🕒 Gyldig frem til kl 20 – stiger til
+vanlig pris om 50 min".
 
-**Capture `default_price` too.** We don't currently capture this boolean
-(is this the everyday price, or a limited-time happy-hour price) from the
-source data at all. Capturing it lets us badge bars as "🕒 Happy hour" vs.
-"✅ Always this price" instead of just a plain number.
+**Capture `default_price` too.** ✅ Implemented — see above.
 
 **Round calculator.** Type in how many friends you're buying for, see the
 total cost of a round at each visible bar. Small input, makes the price
@@ -167,8 +166,10 @@ channel we're not using at all right now, and it's cheap to add now that
 markers are `divIcon` HTML (shape is just a `border-radius` tweak, not a
 redraw of an SVG path).
 
-**Recommended: shape = pricing type, color stays = price level.**
-Rounded squares for bars on a time-limited happy-hour price, circles for
+**Recommended: shape = pricing type, color stays = price level.** ✅
+Implemented, plus the countdown badge from the discussion below went in
+too (both shape and badge together, rather than picking one). Rounded
+squares for bars on a time-limited happy-hour price, circles for
 bars where the price is always valid. This directly uses the
 `default_price` field we already flagged capturing above (Pass 2) — right
 now we only *say* "Happy hour" in text inside the popup, which means you
