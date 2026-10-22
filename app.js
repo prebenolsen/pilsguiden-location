@@ -5,6 +5,13 @@ const OSLO_CENTER = [59.9139, 10.7522];
 // visible (faintly) rather than vanishing. FADE_WINDOW_KR is how many kr
 // past the edge a bar can be and still show at all (at near-zero opacity).
 const FADE_WINDOW_KR = 20;
+// Keep in sync with the breakpoint in style.css.
+const MOBILE_BREAKPOINT_PX = 640;
+const CAN_SHARE = typeof navigator.share === "function";
+
+function isMobile() {
+  return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
+}
 
 const map = L.map("map", { zoomControl: true }).setView(OSLO_CENTER, 12);
 
@@ -57,7 +64,12 @@ function popupHtml(bar) {
         Pris sjekket: ${formatDate(bar.priceChecked)}
       </div>
       ${staleHtml}
-      <a href="${bar.url}" target="_blank" rel="noopener">Se på Pilsguiden →</a>
+      <div class="popup-actions">
+        <button type="button" class="share-btn" data-bar-id="${bar.id}">
+          ${CAN_SHARE ? "📤 Del adresse" : "📋 Kopier adresse"}
+        </button>
+        <a href="${bar.url}" target="_blank" rel="noopener">Pilsguiden →</a>
+      </div>
     </div>
   `;
 }
@@ -67,6 +79,44 @@ function escapeHtml(str) {
   div.textContent = str ?? "";
   return div.innerHTML;
 }
+
+// Wires the share/copy button each time a popup opens. Popups are cached
+// on their marker by Leaflet (closing doesn't destroy the DOM), so guard
+// against re-wiring the same button on every reopen.
+map.on("popupopen", (e) => {
+  const el = e.popup.getElement();
+  const btn = el && el.querySelector(".share-btn");
+  if (!btn || btn.dataset.wired) return;
+  btn.dataset.wired = "1";
+
+  btn.addEventListener("click", async () => {
+    const bar = bars.find((b) => b.id === Number(btn.dataset.barId));
+    if (!bar) return;
+    const shareText = `${bar.name} – ${bar.address}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: bar.name, text: shareText, url: bar.url });
+      } catch {
+        // user cancelled the share sheet - nothing to do
+      }
+      return;
+    }
+
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(shareText);
+        const original = btn.textContent;
+        btn.textContent = "✅ Kopiert!";
+        setTimeout(() => {
+          btn.textContent = original;
+        }, 1500);
+      } catch {
+        // clipboard blocked (permissions/insecure context) - nothing else we can do
+      }
+    }
+  });
+});
 
 // 1 right at the filter edge, fading linearly to 0 at FADE_WINDOW_KR past
 // it. Inside the filter range it's always 1.
@@ -100,7 +150,7 @@ function renderMarkers(filterMin, filterMax) {
     const baseFillOpacity = stale ? 0.45 : 0.9;
     const baseStrokeOpacity = stale ? 0.8 : 1;
     const marker = L.circleMarker([bar.lat, bar.lng], {
-      radius: 8,
+      radius: isMobile() ? 11 : 8, // bigger touch target on phones
       fillColor: priceColor(bar.pricePerHalfLiter, colorLo, colorHi),
       fillOpacity: baseFillOpacity * fade,
       opacity: baseStrokeOpacity * fade,
@@ -122,6 +172,8 @@ function setupSlider() {
   const maxInput = document.getElementById("slider-max");
   const rangeEl = document.getElementById("slider-range");
   const label = document.getElementById("price-range-label");
+  const minValueEl = document.getElementById("min-value");
+  const maxValueEl = document.getElementById("max-value");
 
   [minInput, maxInput].forEach((input) => {
     input.min = minPrice;
@@ -137,17 +189,93 @@ function setupSlider() {
       [lo, hi] = [hi, lo];
     }
     const span = maxPrice - minPrice || 1;
-    const leftPct = ((lo - minPrice) / span) * 100;
-    const rightPct = ((hi - minPrice) / span) * 100;
-    rangeEl.style.left = `${leftPct}%`;
-    rangeEl.style.right = `${100 - rightPct}%`;
+    const loPct = ((lo - minPrice) / span) * 100;
+    const hiPct = ((hi - minPrice) / span) * 100;
+
+    if (isMobile()) {
+      // Vertical track: 0% is the bottom (min), 100% is the top (max).
+      rangeEl.style.left = "";
+      rangeEl.style.right = "";
+      rangeEl.style.bottom = `${loPct}%`;
+      rangeEl.style.top = `${100 - hiPct}%`;
+    } else {
+      rangeEl.style.top = "";
+      rangeEl.style.bottom = "";
+      rangeEl.style.left = `${loPct}%`;
+      rangeEl.style.right = `${100 - hiPct}%`;
+    }
+
     label.textContent = `${lo} – ${hi} kr`;
+    minValueEl.textContent = `${minInput.value} kr`;
+    maxValueEl.textContent = `${maxInput.value} kr`;
     renderMarkers(lo, hi);
   }
 
   minInput.addEventListener("input", update);
   maxInput.addEventListener("input", update);
+  window.addEventListener("resize", update);
+
+  document.querySelectorAll(".step-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = btn.dataset.target === "min" ? minInput : maxInput;
+      const next = Number(input.value) + Number(btn.dataset.delta);
+      input.value = Math.max(minPrice, Math.min(maxPrice, next));
+      update();
+    });
+  });
+
   update();
+}
+
+// Bottom-sheet drag-to-collapse behavior for the mobile panel. Harmless
+// on desktop since #panel-handle is display:none there, so the handle
+// never receives pointer events.
+function setupPanelDrag() {
+  const panel = document.getElementById("panel");
+  const handle = document.getElementById("panel-handle");
+  const content = document.getElementById("panel-content");
+
+  let dragging = false;
+  let startY = 0;
+  let startHeight = 0;
+  let naturalHeight = 0;
+
+  handle.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    startY = e.clientY;
+    naturalHeight = content.scrollHeight;
+    startHeight = panel.classList.contains("collapsed") ? 0 : naturalHeight;
+    content.style.transition = "none";
+    handle.setPointerCapture(e.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const delta = startY - e.clientY; // finger moving up = positive = expand
+    const next = Math.max(0, Math.min(naturalHeight, startHeight + delta));
+    content.style.maxHeight = `${next}px`;
+  });
+
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    content.style.transition = "";
+
+    const movedMuch = Math.abs(startY - (e.clientY ?? startY)) > 4;
+    let expand;
+    if (!movedMuch) {
+      expand = panel.classList.contains("collapsed"); // tap = toggle
+    } else {
+      const current = parseFloat(content.style.maxHeight || `${startHeight}`);
+      expand = current > naturalHeight / 2;
+    }
+
+    content.style.maxHeight = "";
+    panel.classList.toggle("collapsed", !expand);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
 }
 
 let userMarker = null;
@@ -191,6 +319,7 @@ async function init() {
 
   setupSlider();
   setupLocate();
+  setupPanelDrag();
 }
 
 init();

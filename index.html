@@ -11,36 +11,56 @@
   <div id="map"></div>
 
   <div id="panel">
-    <h1>🍺 Ølkartet Oslo</h1>
-    <p class="subtitle">Billigste halvliter per utested, fra <a href="https://www.pilsguiden.no/liste/oslo" target="_blank" rel="noopener">Pilsguiden</a></p>
+    <div id="panel-handle" aria-hidden="true"><span></span></div>
 
-    <div class="row">
-      <button id="locate-btn">📍 Finn meg</button>
-      <span id="locate-status"></span>
-    </div>
+    <div id="panel-content">
+      <h1>🍺 Ølkartet Oslo</h1>
+      <p class="subtitle">Billigste halvliter per utested, fra <a href="https://www.pilsguiden.no/liste/oslo" target="_blank" rel="noopener">Pilsguiden</a></p>
 
-    <div class="row price-filter">
-      <label>Pris per halvliter: <strong id="price-range-label"></strong></label>
-      <div class="slider" id="slider">
-        <div class="slider-track"></div>
-        <div class="slider-range" id="slider-range"></div>
-        <input type="range" id="slider-min" step="1" />
-        <input type="range" id="slider-max" step="1" />
+      <div class="row">
+        <button id="locate-btn">📍 Finn meg</button>
+        <span id="locate-status"></span>
       </div>
-    </div>
 
-    <div class="legend">
-      <span class="legend-label">Billig</span>
-      <div class="legend-gradient"></div>
-      <span class="legend-label">Dyrt</span>
-    </div>
+      <div class="row price-filter">
+        <div class="price-filter-controls">
+          <label>Pris per halvliter: <strong id="price-range-label"></strong></label>
 
-    <div class="row stats">
-      <span id="visible-count"></span>
-    </div>
+          <div class="stepper-row">
+            <span class="stepper-label">Min</span>
+            <button type="button" class="step-btn" data-target="min" data-delta="-5" aria-label="Senk minimum med 5 kr">−5</button>
+            <span class="stepper-value" id="min-value"></span>
+            <button type="button" class="step-btn" data-target="min" data-delta="5" aria-label="Øk minimum med 5 kr">+5</button>
+          </div>
+          <div class="stepper-row">
+            <span class="stepper-label">Max</span>
+            <button type="button" class="step-btn" data-target="max" data-delta="-5" aria-label="Senk maksimum med 5 kr">−5</button>
+            <span class="stepper-value" id="max-value"></span>
+            <button type="button" class="step-btn" data-target="max" data-delta="5" aria-label="Øk maksimum med 5 kr">+5</button>
+          </div>
+        </div>
 
-    <div class="row stale-note">
-      <span class="dot stale-dot"></span> = pris sjekket for 14+ dager siden
+        <div class="slider" id="slider">
+          <div class="slider-track"></div>
+          <div class="slider-range" id="slider-range"></div>
+          <input type="range" id="slider-min" step="1" />
+          <input type="range" id="slider-max" step="1" />
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="legend-label">Billig</span>
+        <div class="legend-gradient"></div>
+        <span class="legend-label">Dyrt</span>
+      </div>
+
+      <div class="row stats">
+        <span id="visible-count"></span>
+      </div>
+
+      <div class="row stale-note">
+        <span class="dot stale-dot"></span> = pris sjekket for 14+ dager siden
+      </div>
     </div>
   </div>
 

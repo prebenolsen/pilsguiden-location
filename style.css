@@ -72,6 +72,47 @@ html, body {
   font-size: 13px;
 }
 
+.stepper-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.stepper-label {
+  width: 30px;
+  font-size: 12px;
+  color: #555;
+}
+
+.stepper-value {
+  min-width: 46px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.step-btn {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.step-btn:hover {
+  background: #e8e8e8;
+}
+
+.step-btn:active {
+  background: #ddd;
+}
+
 .slider {
   position: relative;
   height: 24px;
@@ -163,6 +204,10 @@ html, body {
   gap: 6px;
 }
 
+#panel-handle {
+  display: none;
+}
+
 .dot {
   display: inline-block;
   width: 10px;
@@ -204,10 +249,30 @@ html, body {
   margin-top: 6px;
 }
 
-.bar-popup a {
-  display: inline-block;
-  margin-top: 6px;
+.bar-popup .popup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.bar-popup .popup-actions a {
   font-size: 12px;
+}
+
+.bar-popup .share-btn {
+  font-size: 12px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bar-popup .share-btn:hover {
+  background: #e8e8e8;
 }
 
 .user-location-marker {
@@ -219,8 +284,102 @@ html, body {
   box-shadow: 0 0 0 2px #1a73e8, 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  /* Bottom-sheet panel: anchored to the bottom edge, full width, with a
+     drag handle. #panel-content's max-height is what actually
+     collapses/expands (see app.js) so the transition can animate
+     smoothly without fighting the sheet's own position. */
   #panel {
-    width: calc(100vw - 24px);
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 0 16px;
+    box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  #panel-handle {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  #panel-handle span {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: #ccc;
+  }
+
+  #panel-content {
+    max-height: 65vh;
+    overflow-y: auto;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+    padding-bottom: 14px;
+  }
+
+  #panel.collapsed #panel-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Vertical price slider: a plain CSS transform/rotate hack would also
+     rotate the custom thumb pseudo-elements out of alignment, so this
+     uses the standard vertical writing-mode instead (native vertical
+     range support), which keeps the thumb styling intact. */
+  .price-filter {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .price-filter-controls {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .slider {
+    position: relative;
+    height: 160px;
+    width: 40px;
+    flex: none;
+    margin: 4px auto 0;
+  }
+
+  .slider-track {
+    top: 0;
+    bottom: 0;
+    left: 18px;
+    right: auto;
+    width: 4px;
+    height: auto;
+  }
+
+  .slider-range {
+    top: auto;
+    left: 18px;
+    width: 4px;
+    height: auto;
+  }
+
+  .slider input[type="range"] {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 40px;
+    height: 160px;
+    top: 0;
+    left: 0;
+  }
+
+  .slider input[type="range"]::-webkit-slider-thumb {
+    margin-top: 0;
+    margin-left: -6px;
   }
 }

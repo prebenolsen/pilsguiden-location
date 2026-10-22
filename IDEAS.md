@@ -19,7 +19,7 @@ prioritized. Nothing here is implemented yet — pick and choose.
 - [ ] Marker clustering for the sentrum/Grünerløkka density problem
 - [ ] Capture `default_price` and badge "happy hour" vs. "always this price"
 - [ ] Brewery filter (dropdown or chip list)
-- [ ] Mobile optimization pass (see below — layout, sharing an address, slider orientation, step buttons)
+- [x] Mobile optimization pass (see below — layout, sharing an address, slider orientation, step buttons)
 - [ ] Colorblind-safe palette option / redundant price cue
 
 ### Bigger / stretch
@@ -57,32 +57,27 @@ should open native directions: `https://maps.apple.com/?q=` on iOS/Safari,
 neither resolves to something useful, fall back to a plain Google search
 for `"<bar name> <address>"`.
 
-**Optimize for mobile use.** This is the device most people will actually
+**Optimize for mobile use.** ✅ Implemented. This is the device most people will actually
 pull the map up on while already out — standing outside a bar deciding
 whether to go in, or deciding where to walk next — so it deserves its own
 pass rather than being an afterthought. Open questions to actually try,
 not just assume an answer to:
-- *Sharing with a friend.* Right now there's no way to get an address out
-  of the app other than hand-copying the text from the popup. A "copy
-  address" or native share-sheet button (`navigator.share`, falling back
-  to clipboard copy) next to the address would make "hey, meet me here"
-  one tap instead of a copy-paste fight on a small screen.
-- *Slider orientation.* The current dual-handle slider is horizontal,
-  which is natural on desktop but on a phone — held upright, thumb
-  reaching across a narrow panel — a horizontal drag can feel cramped
-  compared to a vertical thumb-swipe. Worth actually prototyping a
-  vertical version (or a bottom-sheet with a tall slider) and comparing,
-  rather than assuming either is better.
-- *+5 / -5 step buttons.* Small tap targets next to each slider handle
-  that nudge the value by 5 kr, as an alternative/addition to dragging —
-  precise dragging on a touchscreen (especially to land on an exact kr
-  value) is fiddly; a button tap is not.
-- Beyond those three, a mobile pass should also revisit: the floating
-  panel's size (see "Mobile layout" below — it currently covers a lot of
-  a phone screen), tap target sizes on the markers themselves (8px radius
-  circles are a small target for a finger), and whether the popup's
-  "Se på Pilsguiden →" link and any new copy/share/directions buttons fit
-  comfortably without crowding each other.
+- *Sharing with a friend.* ✅ Added a button next to the address in the
+  popup: `navigator.share()` where supported (native share sheet), falling
+  back to copying the address to the clipboard with a "Kopiert!"
+  confirmation elsewhere.
+- *Slider orientation.* ✅ On screens ≤640px the slider becomes vertical
+  (via CSS `writing-mode`, not a transform hack, so the thumb styling
+  stays intact) instead of horizontal — worth getting a real thumbs
+  up/down on whether it actually feels better once tried on an actual
+  phone, rather than just in a simulated test.
+- *+5 / -5 step buttons.* ✅ Added for both the min and max handles, shown
+  on both desktop and mobile.
+- Also revisited: the floating panel is now a bottom sheet on mobile with
+  a drag handle (drag or tap to collapse to just the handle / re-expand —
+  see "Mobile layout" below), marker tap targets are bigger on mobile
+  (11px vs. 8px radius), and the popup's address/share button/Pilsguiden
+  link are laid out in a wrapping flex row so they don't crowd each other.
 
 ---
 
@@ -108,10 +103,10 @@ size, or a small price label that appears at higher zoom levels).
 blank with no explanation. Add a "no bars match 0 kr – 60 kr, try
 widening the range" message.
 
-**Mobile layout.** The floating panel is a fixed-width box anchored
-top-left. On a phone this eats most of the screen. Should collapse into a
-bottom sheet / drawer that can be swiped down to just a handle. (See the
-fuller "Optimize for mobile use" entry above for more specifics to test.)
+**Mobile layout.** ✅ Implemented as part of the mobile-optimization pass
+above: the panel is now a bottom sheet on phones, with a drag handle that
+can be dragged or tapped to collapse down to just the handle (showing the
+full map) or re-expand.
 
 **Persistence.** Save filter + last map view in `localStorage` so a
 returning visitor doesn't have to re-set the price range every time.
