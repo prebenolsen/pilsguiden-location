@@ -24,9 +24,11 @@ function isStale(bar) {
 }
 
 // Green (cheap) -> yellow (mid) -> red (expensive), interpolated in HSL hue space.
-function priceColor(price) {
-  if (maxPrice === minPrice) return "hsl(140, 70%, 45%)";
-  const frac = Math.max(0, Math.min(1, (price - minPrice) / (maxPrice - minPrice)));
+// lo/hi are the currently visible price range, so the scale always stretches
+// across whatever the filter/slider is showing right now.
+function priceColor(price, lo, hi) {
+  if (hi === lo) return "hsl(140, 70%, 45%)";
+  const frac = Math.max(0, Math.min(1, (price - lo) / (hi - lo)));
   const hue = 140 - frac * 140; // 140=green, 70=yellow-green, 0=red
   return `hsl(${hue}, 85%, 45%)`;
 }
@@ -63,16 +65,22 @@ function escapeHtml(str) {
 
 function renderMarkers(filterMin, filterMax) {
   markersLayer.clearLayers();
-  let visible = 0;
 
-  for (const bar of bars) {
-    if (bar.pricePerHalfLiter < filterMin || bar.pricePerHalfLiter > filterMax) continue;
-    visible++;
+  const visibleBars = bars.filter(
+    (bar) => bar.pricePerHalfLiter >= filterMin && bar.pricePerHalfLiter <= filterMax
+  );
 
+  // Rescale the color gradient to whatever's actually on screen, so the
+  // priciest visible bar is always red and the cheapest always green.
+  const visiblePrices = visibleBars.map((b) => b.pricePerHalfLiter);
+  const colorLo = visiblePrices.length ? Math.min(...visiblePrices) : filterMin;
+  const colorHi = visiblePrices.length ? Math.max(...visiblePrices) : filterMax;
+
+  for (const bar of visibleBars) {
     const stale = isStale(bar);
     const marker = L.circleMarker([bar.lat, bar.lng], {
       radius: 8,
-      fillColor: priceColor(bar.pricePerHalfLiter),
+      fillColor: priceColor(bar.pricePerHalfLiter, colorLo, colorHi),
       fillOpacity: stale ? 0.45 : 0.9,
       color: stale ? "#333" : "#1a1a1a",
       weight: stale ? 2 : 1,
@@ -82,7 +90,7 @@ function renderMarkers(filterMin, filterMax) {
     marker.addTo(markersLayer);
   }
 
-  document.getElementById("visible-count").textContent = `Viser ${visible} av ${bars.length} utesteder`;
+  document.getElementById("visible-count").textContent = `Viser ${visibleBars.length} av ${bars.length} utesteder`;
 }
 
 function setupSlider() {
@@ -96,7 +104,7 @@ function setupSlider() {
     input.max = maxPrice;
   });
   minInput.value = minPrice;
-  maxInput.value = maxPrice;
+  maxInput.value = Math.min(minPrice * 2, maxPrice);
 
   function update() {
     let lo = Number(minInput.value);
