@@ -556,10 +556,38 @@ function setupLocate() {
   });
 }
 
+// Bars sharing an exact address (e.g. three food stalls all registered to
+// the same street number, like Torggata 18) geocode to the exact same
+// point and would otherwise stack into one pin, hiding the rest. Nudge
+// each one a few meters apart around the shared point, evenly spaced in
+// a circle, so every one of them stays visible and clickable.
+function spreadOverlappingBars(barList) {
+  const OFFSET_METERS = 12;
+  const METERS_PER_DEGREE_LAT = 111320;
+
+  const groups = new Map();
+  for (const bar of barList) {
+    const key = `${bar.lat},${bar.lng}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(bar);
+  }
+
+  for (const group of groups.values()) {
+    if (group.length < 2) continue;
+    const metersPerDegreeLng = METERS_PER_DEGREE_LAT * Math.cos((group[0].lat * Math.PI) / 180);
+    group.forEach((bar, i) => {
+      const angle = (2 * Math.PI * i) / group.length;
+      bar.lat += (OFFSET_METERS * Math.sin(angle)) / METERS_PER_DEGREE_LAT;
+      bar.lng += (OFFSET_METERS * Math.cos(angle)) / metersPerDegreeLng;
+    });
+  }
+}
+
 async function init() {
   const res = await fetch("data/bars.json");
   const catalogue = await res.json();
   bars = catalogue.bars;
+  spreadOverlappingBars(bars);
 
   const prices = bars.map((b) => b.pricePerHalfLiter);
   minPrice = Math.min(...prices);
