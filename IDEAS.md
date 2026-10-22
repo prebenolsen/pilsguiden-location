@@ -18,6 +18,8 @@ prioritized. Nothing here is implemented yet — pick and choose.
 - [ ] Map-type switcher (standard OSM / satellite / dark, etc.)
 - [ ] Marker clustering for the sentrum/Grünerløkka density problem
 - [ ] Capture `default_price` and badge "happy hour" vs. "always this price"
+      (see "Pass 3 — on marker shapes" for a shape-based take on this: squares for
+      happy-hour bars, circles for standard pricing)
 - [ ] Brewery filter (dropdown or chip list)
 - [x] Mobile optimization pass (see below — layout, sharing an address, slider orientation, step buttons)
 - [ ] Colorblind-safe palette option / redundant price cue
@@ -154,3 +156,60 @@ mean/median, we just never surfaced it.
 **Pub-crawl mode.** A lightweight walking-route feature: given your
 location, draw a short route between the 3–5 cheapest bars within N
 minutes' walk. Bigger feature, but very on-brand for this app.
+
+---
+
+## Pass 3 — on marker shapes
+
+Prompted by: "we now use circles, what about squares — should that tie
+into happy-hour pricing?" Good instinct — shape is a second visual
+channel we're not using at all right now, and it's cheap to add now that
+markers are `divIcon` HTML (shape is just a `border-radius` tweak, not a
+redraw of an SVG path).
+
+**Recommended: shape = pricing type, color stays = price level.**
+Rounded squares for bars on a time-limited happy-hour price, circles for
+bars where the price is always valid. This directly uses the
+`default_price` field we already flagged capturing above (Pass 2) — right
+now we only *say* "Happy hour" in text inside the popup, which means you
+have to tap every single dot to find out. Shape puts that information on
+the map itself, at a glance, across all 586 bars at once: "which of the
+cheap dots near me are happy-hour deals I should hurry to, vs. everyday
+prices I can rely on later tonight too." That's a genuinely different
+piece of information from the color (which only says *how cheap*), so
+it earns its own channel rather than cramming a third meaning into color.
+
+**Why not a badge/ribbon instead of a full shape swap?** Worth being
+honest about the tradeoff: a small clock badge in the corner of the
+existing circle is lower-risk (keeps "circle = bar" as one consistent
+mental model, just decorates it) and easier to miss at a glance is less
+likely. A full shape change is bolder and more scannable from across the
+whole map, but means the legend needs an extra line explaining
+"● = standard price, ▢ = happy hour" or it'll just read as a rendering
+bug the first time someone notices it. Prototype both, see which actually
+reads faster in practice.
+
+**Other places shape could carry meaning**, if the happy-hour use ends up
+not being the priority:
+- *Approximate-location flag.* The 7 bars we only geocoded approximately
+  (the Olaf Ryes plass cluster, see the scraper) currently only reveal
+  that fact in the popup text ("omtrentlig plassering"). A diamond
+  (rotated square) instead of a circle would surface "this pin might be
+  off by a few meters" without opening anything.
+- *"Cheapest you can currently see" badge.* A star or a thicker/double
+  outline on the single cheapest dot in the current map view + filter -
+  a little trophy for whoever's actually the best deal right now, not
+  just "greenest of many greens."
+- *Normalized vs. literal price.* A handful of bars serve beer in sizes
+  other than 0.5L (`actualSize` in the data, e.g. 0.4L), and we show a
+  *calculated* 0.5L-equivalent price rather than what's literally on
+  their menu. A subtle shape or border difference here would be honest
+  about "this number is maths, not the menu" - worth it, but a smaller
+  audience benefit than the happy-hour idea.
+- Considered and set aside: shape-per-brewery. Too many breweries for
+  distinct shapes to stay legible - color or an icon would work better
+  than shape for that dimension, if it's ever wanted.
+
+**Accessibility bonus:** whichever shape use ships, it's also a second,
+non-color way to read the map - directly helps the colorblind-palette
+idea above (Pass 1) without needing to touch the color scale itself.
