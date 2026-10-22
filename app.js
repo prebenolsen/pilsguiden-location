@@ -562,7 +562,7 @@ function setupLocate() {
 // each one a few meters apart around the shared point, evenly spaced in
 // a circle, so every one of them stays visible and clickable.
 function spreadOverlappingBars(barList) {
-  const OFFSET_METERS = 12;
+  const OFFSET_METERS = 4;
   const METERS_PER_DEGREE_LAT = 111320;
 
   const groups = new Map();
