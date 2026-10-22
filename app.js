@@ -8,7 +8,7 @@ const OSLO_CENTER = [59.9139, 10.7522];
 // FADE_WINDOW_KR past the edge. Staleness never affects opacity - only
 // the price filter does - it's shown purely via the dashed border.
 const FADE_WINDOW_KR = 20;
-const FADE_START_OPACITY = 0.75;
+const FADE_START_OPACITY = 0.5;
 // Keep in sync with the breakpoint in style.css.
 const MOBILE_BREAKPOINT_PX = 640;
 const CAN_SHARE = typeof navigator.share === "function";
