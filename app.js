@@ -2,9 +2,13 @@ const STALE_DAYS = 14;
 const OSLO_CENTER = [59.9139, 10.7522];
 // Bars just outside the slider range fade out gradually instead of
 // disappearing immediately, so a bar 1-2 kr over the limit is still
-// visible (faintly) rather than vanishing. FADE_WINDOW_KR is how many kr
-// past the edge a bar can be and still show at all (at near-zero opacity).
+// visible (faintly) rather than vanishing. A bar inside the filter is
+// always fully opaque; the instant it's outside, it steps straight down
+// to FADE_START_OPACITY, then fades the rest of the way to invisible by
+// FADE_WINDOW_KR past the edge. Staleness never affects opacity - only
+// the price filter does - it's shown purely via the dashed border.
 const FADE_WINDOW_KR = 20;
+const FADE_START_OPACITY = 0.75;
 // Keep in sync with the breakpoint in style.css.
 const MOBILE_BREAKPOINT_PX = 640;
 const CAN_SHARE = typeof navigator.share === "function";
@@ -112,7 +116,7 @@ function priceDotIcon(bar, color, fade, stale) {
   const borderColor = stale ? "#333" : "#1a1a1a";
   const borderStyle = stale ? "dashed" : "solid";
   const borderWidth = stale ? 2 : 1;
-  const opacity = (stale ? 0.75 : 0.95) * fade;
+  const opacity = fade; // staleness is shown only via the border, never via opacity
 
   const html = `
     <div class="price-dot" style="
@@ -216,12 +220,14 @@ map.on("popupopen", (e) => {
   });
 });
 
-// 1 right at the filter edge, fading linearly to 0 at FADE_WINDOW_KR past
-// it. Inside the filter range it's always 1.
+// 1 (fully opaque) inside the filter range. The instant a bar is outside
+// it, this steps down to FADE_START_OPACITY (at 1 kr past the edge) and
+// then fades linearly the rest of the way to 0 by FADE_WINDOW_KR past it.
 function fadeFactor(price, filterMin, filterMax) {
   if (price >= filterMin && price <= filterMax) return 1;
   const distance = price < filterMin ? filterMin - price : price - filterMax;
-  return Math.max(0, 1 - distance / FADE_WINDOW_KR);
+  const remainingSpan = FADE_WINDOW_KR - 1 || 1;
+  return Math.max(0, FADE_START_OPACITY * (1 - (distance - 1) / remainingSpan));
 }
 
 function renderMarkers(filterMin, filterMax) {
