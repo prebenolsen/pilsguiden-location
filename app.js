@@ -100,6 +100,42 @@ function priceColor(price, lo, hi) {
   return `hsl(${hue}, 85%, 45%)`;
 }
 
+// Dot radius, doubled from the original plain-circle size as a first pass
+// at making the price number inside legible.
+const DOT_RADIUS_DESKTOP = 16;
+const DOT_RADIUS_MOBILE = 22;
+
+function priceDotIcon(bar, color, fade, stale) {
+  const radius = isMobile() ? DOT_RADIUS_MOBILE : DOT_RADIUS_DESKTOP;
+  const diameter = radius * 2;
+  const fontSize = Math.round(diameter * 0.38);
+  const borderColor = stale ? "#333" : "#1a1a1a";
+  const borderStyle = stale ? "dashed" : "solid";
+  const borderWidth = stale ? 2 : 1;
+  const opacity = (stale ? 0.75 : 0.95) * fade;
+
+  const html = `
+    <div class="price-dot" style="
+      width: ${diameter}px;
+      height: ${diameter}px;
+      font-size: ${fontSize}px;
+      background: ${color};
+      opacity: ${opacity};
+      border-color: ${borderColor};
+      border-style: ${borderStyle};
+      border-width: ${borderWidth}px;
+    ">${Math.round(bar.pricePerHalfLiter)}</div>
+  `;
+
+  return L.divIcon({
+    html,
+    className: "price-dot-anchor",
+    iconSize: [diameter, diameter],
+    iconAnchor: [diameter / 2, diameter / 2],
+    popupAnchor: [0, -diameter / 2],
+  });
+}
+
 function formatDate(isoDate) {
   return new Date(isoDate).toLocaleDateString("nb-NO", { year: "numeric", month: "short", day: "numeric" });
 }
@@ -209,16 +245,8 @@ function renderMarkers(filterMin, filterMax) {
   for (const bar of [...inRangeBars, ...nearbyBars]) {
     const fade = fadeFactor(bar.pricePerHalfLiter, filterMin, filterMax);
     const stale = isStale(bar);
-    const baseFillOpacity = stale ? 0.45 : 0.9;
-    const baseStrokeOpacity = stale ? 0.8 : 1;
-    const marker = L.circleMarker([bar.lat, bar.lng], {
-      radius: isMobile() ? 11 : 8, // bigger touch target on phones
-      fillColor: priceColor(bar.pricePerHalfLiter, colorLo, colorHi),
-      fillOpacity: baseFillOpacity * fade,
-      opacity: baseStrokeOpacity * fade,
-      color: stale ? "#333" : "#1a1a1a",
-      weight: stale ? 2 : 1,
-      dashArray: stale ? "3,2" : null,
+    const marker = L.marker([bar.lat, bar.lng], {
+      icon: priceDotIcon(bar, priceColor(bar.pricePerHalfLiter, colorLo, colorHi), fade, stale),
     });
     marker.bindPopup(popupHtml(bar));
     marker.addTo(markersLayer);
