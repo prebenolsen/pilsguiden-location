@@ -1,0 +1,132 @@
+# Ideas for Ølkartet Oslo
+
+A backlog of possible improvements, brainstormed in three passes: as a UX
+designer, then as someone who really loves beer, then merged and
+prioritized. Nothing here is implemented yet — pick and choose.
+
+## 🎯 Priorities at a glance
+
+### Quick wins (small effort, high value)
+- [ ] Clickable addresses that open Google/Apple Maps for directions
+      (fall back to a Google search for the bar name + address)
+- [ ] Show `validTo` in the popup — data's already scraped, just not rendered
+- [ ] Dynamic min/max kr labels on the legend gradient
+- [ ] Empty-state message when the filter matches zero bars
+- [ ] Persist slider range + map view in `localStorage`
+
+### Medium effort
+- [ ] Map-type switcher (standard OSM / satellite / dark, etc.)
+- [ ] Marker clustering for the sentrum/Grünerløkka density problem
+- [ ] Capture `default_price` and badge "happy hour" vs. "always this price"
+- [ ] Brewery filter (dropdown or chip list)
+- [ ] Mobile bottom-sheet layout for the control panel
+- [ ] Colorblind-safe palette option / redundant price cue
+
+### Bigger / stretch
+- [ ] List view alternative to the map, sortable by price/distance
+- [ ] Round calculator (price × number of friends)
+- [ ] "Surprise me" random-cheap-bar button
+- [ ] Walking pub-crawl route between nearby cheap bars
+
+### ⚠️ Needs a decision first
+- [ ] Strip all visible Pilsguiden references from the front end — see note below
+
+---
+
+## Pass 0 — requested by Preben
+
+**Remove all Pilsguiden references from the UI.** Make it look like the
+data/map has no connection to Pilsguiden — no name, no link, no mention
+anywhere in the front end.
+> Flagging before building this one: the entire dataset comes from
+> scraping pilsguiden.no, and most scraping-sourced-data projects keep a
+> visible attribution both as a courtesy and because many sites' terms of
+> use expect it when their data is republished elsewhere. Worth a
+> conscious call on whether to drop attribution entirely vs. just making
+> it much smaller/less prominent, rather than removing it by default.
+
+**Choose between map types.** Let the user switch the base map — e.g.
+standard street map, satellite/aerial, a darker/cleaner style for night
+use. Leaflet supports this natively via `L.control.layers` with multiple
+free tile providers (OSM standard, CartoDB Positron/Dark Matter, Esri
+satellite, etc.) — each has its own attribution requirement to keep.
+
+**Clickable addresses → directions.** Tapping/clicking a bar's address
+should open native directions: `https://maps.apple.com/?q=` on iOS/Safari,
+`https://www.google.com/maps/search/?api=1&query=` elsewhere, and if
+neither resolves to something useful, fall back to a plain Google search
+for `"<bar name> <address>"`.
+
+---
+
+## Pass 1 — as a UX designer
+
+**Marker clustering.** 586 bars on one map means the city center
+(Grünerløkka/Grønland/sentrum) is a solid blob of overlapping dots — I hit
+this myself while testing, had to zoom way in to click one bar.
+`Leaflet.markercluster` (or a simple grid-based cluster) would make the
+dense area usable and still look great zoomed out.
+
+**Legend needs numbers.** The color legend says "Billig"/"Dyrt" but no
+numbers. Now that the color scale rescales to whatever's currently
+filtered/visible, the legend should show the live kr values at each end —
+otherwise "green" and "red" are meaningless without opening a popup.
+
+**Colorblind consideration.** Green-to-red is the single worst gradient
+for red-green colorblindness (~8% of men). Worth either switching to a
+blue→orange scale, or keeping color but adding a redundant cue (marker
+size, or a small price label that appears at higher zoom levels).
+
+**Empty state.** If the slider filters out every bar, the map just goes
+blank with no explanation. Add a "no bars match 0 kr – 60 kr, try
+widening the range" message.
+
+**Mobile layout.** The floating panel is a fixed-width box anchored
+top-left. On a phone this eats most of the screen. Should collapse into a
+bottom sheet / drawer that can be swiped down to just a handle.
+
+**Persistence.** Save filter + last map view in `localStorage` so a
+returning visitor doesn't have to re-set the price range every time.
+
+**Loading & error states.** A failed fetch of `data/bars.json` currently
+just shows an empty map with no message.
+
+**List/table view.** An alternative to the map (sortable by price,
+distance, name) — some users just want "give me the 10 cheapest places"
+without panning around a map.
+
+## Pass 2 — as someone who really loves beer
+
+**Happy-hour pricing is already scraped and thrown away.** We capture
+`valid_to` (e.g. *"Gyldig frem til kl 23"*) but never show it in the
+popup! That's the single most beer-relevant fact we're sitting on — a
+price that's only valid until 23:00 is very different from one that's
+always valid. Add it to the popup, and ideally compute "is this
+happy-hour price still active right now" using the current time vs.
+`valid_to`.
+
+**Capture `default_price` too.** We don't currently capture this boolean
+(is this the everyday price, or a limited-time happy-hour price) from the
+source data at all. Capturing it lets us badge bars as "🕒 Happy hour" vs.
+"✅ Always this price" instead of just a plain number.
+
+**Round calculator.** Type in how many friends you're buying for, see the
+total cost of a round at each visible bar. Small input, makes the price
+number feel real.
+
+**Brewery filter.** The data already has `brewery` (Ringnes, Carlsberg,
+Budweiser, etc.) per bar. Being loyal to a brand, or wanting to avoid a
+macro lager and find a place with something else on tap, is a real beer
+nerd use case.
+
+**"Surprise me" button.** Picks a random cheap bar within the current
+filter/view. Good for decision paralysis on a Friday at 17:00.
+
+**City-average reference.** Show the Oslo average price as a reference
+(e.g. a tick mark on the slider track at the citywide median) so "110 kr"
+has context — the scraped source data already gives us a city-wide
+mean/median, we just never surfaced it.
+
+**Pub-crawl mode.** A lightweight walking-route feature: given your
+location, draw a short route between the 3–5 cheapest bars within N
+minutes' walk. Bigger feature, but very on-brand for this app.
