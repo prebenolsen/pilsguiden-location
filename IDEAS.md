@@ -15,7 +15,7 @@ prioritized. Nothing here is implemented yet — pick and choose.
 - [x] Persist slider range + map view in `localStorage`
 
 ### Medium effort
-- [ ] Map-type switcher (standard OSM / satellite / dark, etc.)
+- [x] Map-type switcher (standard OSM / satellite / dark, etc.)
 - [ ] Marker clustering for the sentrum/Grünerløkka density problem
 - [x] Capture `default_price` and badge "happy hour" vs. "always this price"
       (shipped as shapes — see "Pass 3 — on marker shapes")
@@ -46,11 +46,12 @@ anywhere in the front end.
 > conscious call on whether to drop attribution entirely vs. just making
 > it much smaller/less prominent, rather than removing it by default.
 
-**Choose between map types.** Let the user switch the base map — e.g.
-standard street map, satellite/aerial, a darker/cleaner style for night
-use. Leaflet supports this natively via `L.control.layers` with multiple
-free tile providers (OSM standard, CartoDB Positron/Dark Matter, Esri
-satellite, etc.) — each has its own attribution requirement to keep.
+**Choose between map types.** ✅ Implemented via `L.control.layers`
+(top-right): Standard (OSM), Lys and Mørk (Esri's gray "Canvas" basemaps —
+CartoDB's Positron/Dark Matter turned out to now require an API key for
+anonymous use, so swapped for Esri's free equivalent, base + label-
+reference layers combined per option), and Satellitt (Esri World
+Imagery). Choice persists in `localStorage` like the other map state.
 
 **Clickable addresses → directions.** ✅ Implemented. The address in each
 popup is now a link: `https://maps.apple.com/?q=` on iOS/iPadOS,

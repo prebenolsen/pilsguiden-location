@@ -74,10 +74,50 @@ map.on("moveend", () => {
   saveStored(STORAGE_KEYS.view, { lat: center.lat, lng: center.lng, zoom: map.getZoom() });
 });
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
+const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const ESRI_GRAY_ATTRIBUTION = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, FAO, NOAA, USGS";
+
+// Esri's gray "Canvas" basemaps ship as two layers: a base (landmass/roads)
+// and a transparent "Reference" overlay with labels - combine them with a
+// layerGroup so they switch together as one entry in the control. Unlike
+// CartoDB's Positron/Dark Matter (now API-key-only), these work anonymously.
+function grayCanvasLayer(variant) {
+  const opts = { maxNativeZoom: 16, maxZoom: 19, attribution: ESRI_GRAY_ATTRIBUTION };
+  return L.layerGroup([
+    L.tileLayer(
+      `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${variant}_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
+      opts
+    ),
+    L.tileLayer(
+      `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${variant}_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,
+      { maxNativeZoom: 16, maxZoom: 19 }
+    ),
+  ]);
+}
+
+const baseLayers = {
+  Standard: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: OSM_ATTRIBUTION,
+  }),
+  Lys: grayCanvasLayer("Light"),
+  Mørk: grayCanvasLayer("Dark"),
+  Satellitt: L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom: 19,
+      attribution: "Tiles &copy; Esri &mdash; Esri, Maxar, Earthstar Geographics, and the GIS community",
+    }
+  ),
+};
+
+const STORAGE_KEY_BASE_LAYER = "olkartet:baseLayer";
+const savedBaseLayerName = loadStored(STORAGE_KEY_BASE_LAYER);
+const initialBaseLayer = baseLayers[savedBaseLayerName] ? savedBaseLayerName : "Standard";
+baseLayers[initialBaseLayer].addTo(map);
+
+L.control.layers(baseLayers, null, { position: "topright" }).addTo(map);
+map.on("baselayerchange", (e) => saveStored(STORAGE_KEY_BASE_LAYER, e.name));
 
 const markersLayer = L.layerGroup().addTo(map);
 
