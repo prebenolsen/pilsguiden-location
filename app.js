@@ -17,7 +17,7 @@ function isMobile() {
   return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
 }
 
-const STORAGE_KEYS = { filter: "olkartet:filter", view: "olkartet:view" };
+const STORAGE_KEYS = { filter: "olkartet:filter", view: "olkartet:view", showNearby: "olkartet:showNearby" };
 
 function loadStored(key) {
   try {
@@ -230,7 +230,13 @@ function fadeFactor(price, filterMin, filterMax) {
   return Math.max(0, FADE_START_OPACITY * (1 - (distance - 1) / remainingSpan));
 }
 
+// Whether the faded "near-miss" bars (just outside the filter) are drawn
+// at all. Defaults to hidden - persisted like the other filter state.
+let showNearby = Boolean(loadStored(STORAGE_KEYS.showNearby));
+let currentFilter = { min: 0, max: 0 };
+
 function renderMarkers(filterMin, filterMax) {
+  currentFilter = { min: filterMin, max: filterMax };
   markersLayer.clearLayers();
 
   const inRangeBars = bars.filter(
@@ -248,7 +254,8 @@ function renderMarkers(filterMin, filterMax) {
   const colorLo = inRangePrices.length ? Math.min(...inRangePrices) : filterMin;
   const colorHi = inRangePrices.length ? Math.max(...inRangePrices) : filterMax;
 
-  for (const bar of [...inRangeBars, ...nearbyBars]) {
+  const barsToDraw = showNearby ? [...inRangeBars, ...nearbyBars] : inRangeBars;
+  for (const bar of barsToDraw) {
     const fade = fadeFactor(bar.pricePerHalfLiter, filterMin, filterMax);
     const stale = isStale(bar);
     const marker = L.marker([bar.lat, bar.lng], {
@@ -267,10 +274,32 @@ function renderMarkers(filterMin, filterMax) {
     countEl.classList.add("empty-state");
   } else {
     countEl.classList.remove("empty-state");
-    countEl.textContent = nearbyBars.length
-      ? `Viser ${inRangeBars.length} av ${bars.length} utesteder (+${nearbyBars.length} i nærheten av filteret)`
-      : `Viser ${inRangeBars.length} av ${bars.length} utesteder`;
+    if (!nearbyBars.length) {
+      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder`;
+    } else if (showNearby) {
+      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder (+${nearbyBars.length} i nærheten av filteret)`;
+    } else {
+      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder (${nearbyBars.length} skjult i nærheten)`;
+    }
   }
+}
+
+function setupNearbyToggle() {
+  const btn = document.getElementById("toggle-nearby-btn");
+
+  function updateLabel() {
+    btn.textContent = showNearby
+      ? "🙈 Skjul utestedene nær filtergrensen"
+      : "👁 Vis utestedene nær filtergrensen";
+  }
+
+  updateLabel();
+  btn.addEventListener("click", () => {
+    showNearby = !showNearby;
+    saveStored(STORAGE_KEYS.showNearby, showNearby);
+    updateLabel();
+    renderMarkers(currentFilter.min, currentFilter.max);
+  });
 }
 
 function setupSlider() {
@@ -432,6 +461,7 @@ async function init() {
   setupSlider();
   setupLocate();
   setupPanelDrag();
+  setupNearbyToggle();
 }
 
 init();
