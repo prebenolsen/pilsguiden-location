@@ -375,19 +375,15 @@ function renderMarkers(filterMin, filterMax) {
   document.getElementById("legend-min").textContent = `${colorLo} kr`;
   document.getElementById("legend-max").textContent = `${colorHi} kr`;
 
+  // Only speak up when the filter comes up empty - the user doesn't need a
+  // running tally of how many bars are shown or hidden otherwise.
   const countEl = document.getElementById("visible-count");
   if (inRangeBars.length === 0) {
     countEl.textContent = `Ingen utesteder mellom ${filterMin} og ${filterMax} kr – prøv å utvide filteret.`;
     countEl.classList.add("empty-state");
   } else {
+    countEl.textContent = "";
     countEl.classList.remove("empty-state");
-    if (!nearbyBars.length) {
-      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder`;
-    } else if (showNearby) {
-      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder (+${nearbyBars.length} i nærheten av filteret)`;
-    } else {
-      countEl.textContent = `Viser ${inRangeBars.length} av ${bars.length} utesteder (${nearbyBars.length} skjult i nærheten)`;
-    }
   }
 }
 
@@ -414,7 +410,6 @@ function setupSlider() {
   const maxInput = document.getElementById("slider-max");
   const rangeEl = document.getElementById("slider-range");
   const label = document.getElementById("price-range-label");
-  const maxValueEl = document.getElementById("max-value");
 
   [minInput, maxInput].forEach((input) => {
     input.min = minPrice;
@@ -454,7 +449,6 @@ function setupSlider() {
     }
 
     label.textContent = `${lo} – ${hi} kr`;
-    maxValueEl.textContent = `${maxInput.value} kr`;
     saveStored(STORAGE_KEYS.filter, { min: Number(minInput.value), max: Number(maxInput.value) });
     renderMarkers(lo, hi);
   }

@@ -15,7 +15,7 @@
 
     <div id="panel-content">
       <h1>🍺 Ølkartet Oslo</h1>
-      <p class="subtitle">Billigste halvliter per utested, fra <a href="https://www.pilsguiden.no/liste/oslo" target="_blank" rel="noopener">Pilsguiden</a></p>
+      <p class="subtitle">Billigste halvliter i byen</p>
 
       <div class="row">
         <button id="locate-btn">📍 Finn meg</button>
@@ -24,13 +24,12 @@
 
       <div class="row price-filter">
         <div class="price-filter-controls">
-          <label>Pris per halvliter: <strong id="price-range-label"></strong></label>
-
-          <div class="stepper-row">
-            <span class="stepper-label">Max</span>
-            <button type="button" class="step-btn" data-target="max" data-delta="-5" aria-label="Senk maksimum med 5 kr">−5</button>
-            <span class="stepper-value" id="max-value"></span>
-            <button type="button" class="step-btn" data-target="max" data-delta="5" aria-label="Øk maksimum med 5 kr">+5</button>
+          <div class="price-filter-header">
+            <label>Pris <strong id="price-range-label"></strong></label>
+            <div class="stepper-row" role="group" aria-label="Juster maksimumspris">
+              <button type="button" class="step-btn" data-target="max" data-delta="-5" aria-label="Senk maksimum med 5 kr">−</button>
+              <button type="button" class="step-btn" data-target="max" data-delta="5" aria-label="Øk maksimum med 5 kr">+</button>
+            </div>
           </div>
         </div>
 
@@ -42,12 +41,6 @@
         </div>
       </div>
 
-      <div class="legend">
-        <span class="legend-label" id="legend-min">Billig</span>
-        <div class="legend-gradient"></div>
-        <span class="legend-label" id="legend-max">Dyrt</span>
-      </div>
-
       <div class="row">
         <button type="button" id="toggle-nearby-btn"></button>
       </div>
@@ -56,15 +49,21 @@
         <span id="visible-count"></span>
       </div>
 
-      <div class="row stale-note">
-        <span class="dot stale-dot"></span> = pris sjekket for 14+ dager siden
-      </div>
-
-      <div class="row shape-note">
-        <span class="shape-sample shape-circle"></span> vanlig pris &nbsp;
-        <span class="shape-sample shape-square"></span> happy hour (tidsbegrenset) &nbsp;
-        <span class="price-dot-badge-sample">45m</span> stiger snart
-      </div>
+      <details class="info-disclosure">
+        <summary>Tegnforklaring</summary>
+        <div class="legend">
+          <span class="legend-label" id="legend-min">Billig</span>
+          <div class="legend-gradient"></div>
+          <span class="legend-label" id="legend-max">Dyrt</span>
+        </div>
+        <div class="stale-note">
+          <span class="dot stale-dot"></span> pris sjekket for 14+ dager siden
+        </div>
+        <div class="shape-note">
+          <span class="shape-sample shape-circle"></span> vanlig pris
+          <span class="shape-sample shape-square"></span> happy hour
+        </div>
+      </details>
     </div>
   </div>
 
