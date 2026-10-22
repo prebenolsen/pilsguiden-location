@@ -13,6 +13,24 @@ function isMobile() {
   return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
 }
 
+const STORAGE_KEYS = { filter: "olkartet:filter", view: "olkartet:view" };
+
+function loadStored(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch {
+    return null; // unavailable (private browsing, quota, etc.) - just skip persistence
+  }
+}
+
+function saveStored(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // ditto
+  }
+}
+
 // iPadOS 13+ identifies as "MacIntel" in the UA string, so a touch check
 // is needed to tell it apart from an actual Mac.
 function isApplePlatform() {
@@ -37,6 +55,20 @@ function directionsUrl(bar) {
 }
 
 const map = L.map("map", { zoomControl: true }).setView(OSLO_CENTER, 12);
+
+const savedView = loadStored(STORAGE_KEYS.view);
+if (
+  savedView &&
+  Number.isFinite(savedView.lat) &&
+  Number.isFinite(savedView.lng) &&
+  Number.isFinite(savedView.zoom)
+) {
+  map.setView([savedView.lat, savedView.lng], savedView.zoom);
+}
+map.on("moveend", () => {
+  const center = map.getCenter();
+  saveStored(STORAGE_KEYS.view, { lat: center.lat, lng: center.lng, zoom: map.getZoom() });
+});
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -77,6 +109,10 @@ function popupHtml(bar) {
   const staleHtml = stale
     ? `<div class="stale-warning">⚠ Pris sjekket for ${Math.floor(daysSince(bar.priceChecked))} dager siden – kan være utdatert</div>`
     : "";
+  const isTimeLimited = bar.validTo && !/alltid gyldig/i.test(bar.validTo);
+  const validToHtml = bar.validTo
+    ? `<div class="valid-to${isTimeLimited ? " time-limited" : ""}">${isTimeLimited ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}</div>`
+    : "";
   return `
     <div class="bar-popup">
       <h3>${escapeHtml(bar.name)}</h3>
@@ -84,6 +120,7 @@ function popupHtml(bar) {
       <a class="address" href="${directionsUrl(bar)}" target="_blank" rel="noopener" title="Få veibeskrivelse">
         📍 ${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}
       </a>
+      ${validToHtml}
       <div class="meta">
         ${bar.brewery ? `Bryggeri: ${escapeHtml(bar.brewery)}<br>` : ""}
         Pris sjekket: ${formatDate(bar.priceChecked)}
@@ -187,9 +224,19 @@ function renderMarkers(filterMin, filterMax) {
     marker.addTo(markersLayer);
   }
 
-  document.getElementById("visible-count").textContent = nearbyBars.length
-    ? `Viser ${inRangeBars.length} av ${bars.length} utesteder (+${nearbyBars.length} i nærheten av filteret)`
-    : `Viser ${inRangeBars.length} av ${bars.length} utesteder`;
+  document.getElementById("legend-min").textContent = `${colorLo} kr`;
+  document.getElementById("legend-max").textContent = `${colorHi} kr`;
+
+  const countEl = document.getElementById("visible-count");
+  if (inRangeBars.length === 0) {
+    countEl.textContent = `Ingen utesteder mellom ${filterMin} og ${filterMax} kr – prøv å utvide filteret.`;
+    countEl.classList.add("empty-state");
+  } else {
+    countEl.classList.remove("empty-state");
+    countEl.textContent = nearbyBars.length
+      ? `Viser ${inRangeBars.length} av ${bars.length} utesteder (+${nearbyBars.length} i nærheten av filteret)`
+      : `Viser ${inRangeBars.length} av ${bars.length} utesteder`;
+  }
 }
 
 function setupSlider() {
@@ -204,8 +251,15 @@ function setupSlider() {
     input.min = minPrice;
     input.max = maxPrice;
   });
-  minInput.value = minPrice;
-  maxInput.value = Math.min(minPrice * 2, maxPrice);
+
+  const savedFilter = loadStored(STORAGE_KEYS.filter);
+  if (savedFilter && Number.isFinite(savedFilter.min) && Number.isFinite(savedFilter.max)) {
+    minInput.value = Math.max(minPrice, Math.min(maxPrice, savedFilter.min));
+    maxInput.value = Math.max(minPrice, Math.min(maxPrice, savedFilter.max));
+  } else {
+    minInput.value = minPrice;
+    maxInput.value = Math.min(minPrice * 2, maxPrice);
+  }
 
   function update() {
     let lo = Number(minInput.value);
@@ -233,6 +287,7 @@ function setupSlider() {
     label.textContent = `${lo} – ${hi} kr`;
     minValueEl.textContent = `${minInput.value} kr`;
     maxValueEl.textContent = `${maxInput.value} kr`;
+    saveStored(STORAGE_KEYS.filter, { min: Number(minInput.value), max: Number(maxInput.value) });
     renderMarkers(lo, hi);
   }
 

@@ -196,6 +196,11 @@ html, body {
   color: #444;
 }
 
+.stats.empty-state {
+  color: #b35900;
+  font-weight: 600;
+}
+
 .stale-note {
   font-size: 11px;
   color: #777;
@@ -242,6 +247,16 @@ html, body {
 
 .bar-popup .address:hover {
   text-decoration: underline;
+}
+
+.bar-popup .valid-to {
+  font-size: 12px;
+  color: #2a7a2a;
+  margin-bottom: 4px;
+}
+
+.bar-popup .valid-to.time-limited {
+  color: #b35900;
 }
 
 .bar-popup .meta {

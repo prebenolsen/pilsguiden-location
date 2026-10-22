@@ -9,10 +9,10 @@ prioritized. Nothing here is implemented yet — pick and choose.
 ### Quick wins (small effort, high value)
 - [x] Clickable addresses that open Google/Apple Maps for directions
       (fall back to a Google search for the bar name + address)
-- [ ] Show `validTo` in the popup — data's already scraped, just not rendered
-- [ ] Dynamic min/max kr labels on the legend gradient
-- [ ] Empty-state message when the filter matches zero bars
-- [ ] Persist slider range + map view in `localStorage`
+- [x] Show `validTo` in the popup — data's already scraped, just not rendered
+- [x] Dynamic min/max kr labels on the legend gradient
+- [x] Empty-state message when the filter matches zero bars
+- [x] Persist slider range + map view in `localStorage`
 
 ### Medium effort
 - [ ] Map-type switcher (standard OSM / satellite / dark, etc.)
@@ -91,27 +91,27 @@ this myself while testing, had to zoom way in to click one bar.
 `Leaflet.markercluster` (or a simple grid-based cluster) would make the
 dense area usable and still look great zoomed out.
 
-**Legend needs numbers.** The color legend says "Billig"/"Dyrt" but no
-numbers. Now that the color scale rescales to whatever's currently
-filtered/visible, the legend should show the live kr values at each end —
-otherwise "green" and "red" are meaningless without opening a popup.
+**Legend needs numbers.** ✅ Implemented. The legend now shows the live kr
+values at each end of the gradient (recalculated on every filter change,
+matching the color-rescaling behavior), instead of just "Billig"/"Dyrt".
 
 **Colorblind consideration.** Green-to-red is the single worst gradient
 for red-green colorblindness (~8% of men). Worth either switching to a
 blue→orange scale, or keeping color but adding a redundant cue (marker
 size, or a small price label that appears at higher zoom levels).
 
-**Empty state.** If the slider filters out every bar, the map just goes
-blank with no explanation. Add a "no bars match 0 kr – 60 kr, try
-widening the range" message.
+**Empty state.** ✅ Implemented. If the filter matches zero bars, the stats
+line becomes "Ingen utesteder mellom X og Y kr – prøv å utvide filteret"
+instead of silently showing 0.
 
 **Mobile layout.** ✅ Implemented as part of the mobile-optimization pass
 above: the panel is now a bottom sheet on phones, with a drag handle that
 can be dragged or tapped to collapse down to just the handle (showing the
 full map) or re-expand.
 
-**Persistence.** Save filter + last map view in `localStorage` so a
-returning visitor doesn't have to re-set the price range every time.
+**Persistence.** ✅ Implemented. Filter range and map center/zoom are saved
+to `localStorage` on every change and restored on load, so a returning
+visitor keeps their price range and where they left the map.
 
 **Loading & error states.** A failed fetch of `data/bars.json` currently
 just shows an empty map with no message.
@@ -122,13 +122,12 @@ without panning around a map.
 
 ## Pass 2 — as someone who really loves beer
 
-**Happy-hour pricing is already scraped and thrown away.** We capture
-`valid_to` (e.g. *"Gyldig frem til kl 23"*) but never show it in the
-popup! That's the single most beer-relevant fact we're sitting on — a
-price that's only valid until 23:00 is very different from one that's
-always valid. Add it to the popup, and ideally compute "is this
-happy-hour price still active right now" using the current time vs.
-`valid_to`.
+**Happy-hour pricing is already scraped and thrown away.** 🟡 Partially
+implemented: `valid_to` now shows in the popup (e.g. *"🕒 Gyldig frem til
+kl 23"* vs. *"✅ Prisen er alltid gyldig"*), so the fact is no longer
+hidden. Still open: actually parsing the "kl 23" part and comparing it to
+the current time to say "this happy-hour price is/isn't active right
+now" rather than just displaying the raw text.
 
 **Capture `default_price` too.** We don't currently capture this boolean
 (is this the everyday price, or a limited-time happy-hour price) from the
