@@ -97,11 +97,12 @@ function isStale(bar) {
 // Green (cheap) -> yellow (mid) -> red (expensive), interpolated in HSL hue space.
 // lo/hi are the currently visible price range, so the scale always stretches
 // across whatever the filter/slider is showing right now.
-function priceColor(price, lo, hi) {
-  if (hi === lo) return "hsl(140, 70%, 45%)";
-  const frac = Math.max(0, Math.min(1, (price - lo) / (hi - lo)));
-  const hue = 140 - frac * 140; // 140=green, 70=yellow-green, 0=red
-  return `hsl(${hue}, 85%, 45%)`;
+// alpha lets the fill fade (for bars just outside the filter) without
+// touching the dot's own opacity - that would wash out the price number
+// along with the background, against the busy map tiles underneath.
+function priceColor(price, lo, hi, alpha = 1) {
+  const hue = hi === lo ? 140 : 140 - Math.max(0, Math.min(1, (price - lo) / (hi - lo))) * 140;
+  return `hsla(${hue}, 85%, 45%, ${alpha})`;
 }
 
 // Dot radius, doubled from the original plain-circle size as a first pass
@@ -109,22 +110,23 @@ function priceColor(price, lo, hi) {
 const DOT_RADIUS_DESKTOP = 16;
 const DOT_RADIUS_MOBILE = 22;
 
-function priceDotIcon(bar, color, fade, stale) {
+function priceDotIcon(bar, color, stale) {
   const radius = isMobile() ? DOT_RADIUS_MOBILE : DOT_RADIUS_DESKTOP;
   const diameter = radius * 2;
   const fontSize = Math.round(diameter * 0.38);
   const borderColor = stale ? "#333" : "#1a1a1a";
   const borderStyle = stale ? "dashed" : "solid";
   const borderWidth = stale ? 2 : 1;
-  const opacity = fade; // staleness is shown only via the border, never via opacity
 
+  // The dot's own opacity stays at 1 always - only the fill color (passed
+  // in with its own alpha, see priceColor) fades, so the number and
+  // border stay fully legible no matter how faded the fill is.
   const html = `
     <div class="price-dot" style="
       width: ${diameter}px;
       height: ${diameter}px;
       font-size: ${fontSize}px;
       background: ${color};
-      opacity: ${opacity};
       border-color: ${borderColor};
       border-style: ${borderStyle};
       border-width: ${borderWidth}px;
@@ -259,7 +261,7 @@ function renderMarkers(filterMin, filterMax) {
     const fade = fadeFactor(bar.pricePerHalfLiter, filterMin, filterMax);
     const stale = isStale(bar);
     const marker = L.marker([bar.lat, bar.lng], {
-      icon: priceDotIcon(bar, priceColor(bar.pricePerHalfLiter, colorLo, colorHi), fade, stale),
+      icon: priceDotIcon(bar, priceColor(bar.pricePerHalfLiter, colorLo, colorHi, fade), stale),
     });
     marker.bindPopup(popupHtml(bar));
     marker.addTo(markersLayer);
