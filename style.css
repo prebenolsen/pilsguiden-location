@@ -45,12 +45,6 @@ html, body {
   margin: 0 0 2px;
 }
 
-.subtitle {
-  margin: 0 0 12px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
 .row {
   margin: 12px 0;
 }
@@ -494,7 +488,7 @@ html, body {
   }
 
   #panel-content {
-    max-height: 65vh;
+    max-height: 50vh;
     overflow-y: auto;
     transition: max-height 0.25s ease, opacity 0.2s ease;
     padding-bottom: 14px;
@@ -505,58 +499,5 @@ html, body {
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
-  }
-
-  /* Vertical price slider: a plain CSS transform/rotate hack would also
-     rotate the custom thumb pseudo-elements out of alignment, so this
-     uses the standard vertical writing-mode instead (native vertical
-     range support), which keeps the thumb styling intact. */
-  .price-filter {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .price-filter-controls {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .slider {
-    position: relative;
-    height: 160px;
-    width: 40px;
-    flex: none;
-    margin: 4px auto 0;
-  }
-
-  .slider-track {
-    top: 0;
-    bottom: 0;
-    left: 18px;
-    right: auto;
-    width: 4px;
-    height: auto;
-  }
-
-  .slider-range {
-    top: auto;
-    left: 18px;
-    width: 4px;
-    height: auto;
-  }
-
-  .slider input[type="range"] {
-    writing-mode: vertical-lr;
-    direction: rtl;
-    width: 40px;
-    height: 160px;
-    top: 0;
-    left: 0;
-  }
-
-  .slider input[type="range"]::-webkit-slider-thumb {
-    margin-top: 0;
-    margin-left: -6px;
   }
 }

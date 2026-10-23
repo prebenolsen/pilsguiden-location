@@ -58,7 +58,7 @@ function directionsUrl(bar) {
     : `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
-const map = L.map("map", { zoomControl: true }).setView(OSLO_CENTER, 12);
+const map = L.map("map", { zoomControl: false }).setView(OSLO_CENTER, 12);
 
 const savedView = loadStored(STORAGE_KEYS.view);
 if (
@@ -591,6 +591,12 @@ async function init() {
   setupLocate();
   setupPanelDrag();
   setupNearbyToggle();
+
+  // Keep the map as the main event on mobile: the settings sheet starts
+  // tucked away behind its handle instead of covering ~40% of the screen.
+  if (isMobile()) {
+    document.getElementById("panel").classList.add("collapsed");
+  }
 }
 
 init();
