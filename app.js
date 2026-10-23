@@ -11,7 +11,6 @@ const FADE_WINDOW_KR = 20;
 const FADE_START_OPACITY = 0.5;
 // Keep in sync with the breakpoint in style.css.
 const MOBILE_BREAKPOINT_PX = 640;
-const CAN_SHARE = typeof navigator.share === "function";
 
 function isMobile() {
   return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
@@ -311,14 +310,19 @@ function priceDotIcon(bar, color, stale) {
   });
 }
 
-function formatDate(isoDate) {
-  return new Date(isoDate).toLocaleDateString("nb-NO", { year: "numeric", month: "short", day: "numeric" });
-}
+// Simple "opens elsewhere" glyph (box + outward arrow), the standard
+// external-link cue, so it's clear the address button leaves the page.
+const EXTERNAL_LINK_ICON = `
+  <svg class="external-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">
+    <path d="M14 3h7v7h-2V6.41l-9.3 9.3-1.41-1.42 9.29-9.29H14V3z" fill="currentColor"/>
+    <path d="M5 5h6v2H7v10h10v-4h2v6H5V5z" fill="currentColor"/>
+  </svg>
+`;
 
 function popupHtml(bar) {
   const stale = isStale(bar);
   const staleHtml = stale
-    ? `<div class="stale-warning">⚠ Pris sjekket for ${Math.floor(daysSince(bar.priceChecked))} dager siden – kan være utdatert</div>`
+    ? `<div class="stale-warning">⚠ Pris sjekket for ${Math.floor(daysSince(bar.priceChecked))} dager siden</div>`
     : "";
   const happyHour = isHappyHour(bar);
   const remaining = minutesUntilPriceChange(bar);
@@ -329,24 +333,23 @@ function popupHtml(bar) {
   const validToHtml = bar.validTo
     ? `<div class="valid-to${happyHour ? " time-limited" : ""}">${happyHour ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}${countdownHtml}</div>`
     : "";
+  const metaHtml = bar.brewery ? `<div class="meta">Bryggeri: ${escapeHtml(bar.brewery)}</div>` : "";
+  const addressLabel = `${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}`;
+
   return `
     <div class="bar-popup">
       <h3>${escapeHtml(bar.name)}</h3>
       <div class="price">${bar.pricePerHalfLiter} kr / 0,5L</div>
-      <a class="address" href="${directionsUrl(bar)}" target="_blank" rel="noopener" title="Få veibeskrivelse">
-        📍 ${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}
-      </a>
       ${validToHtml}
-      <div class="meta">
-        ${bar.brewery ? `Bryggeri: ${escapeHtml(bar.brewery)}<br>` : ""}
-        Pris sjekket: ${formatDate(bar.priceChecked)}
-      </div>
+      ${metaHtml}
       ${staleHtml}
       <div class="popup-actions">
-        <button type="button" class="share-btn" data-bar-id="${bar.id}">
-          ${CAN_SHARE ? "📤 Del adresse" : "📋 Kopier adresse"}
+        <a class="popup-btn address-btn" href="${directionsUrl(bar)}" target="_blank" rel="noopener" title="Åpne veibeskrivelse i kart-app">
+          📍 ${addressLabel}${EXTERNAL_LINK_ICON}
+        </a>
+        <button type="button" class="popup-btn copy-btn" data-bar-id="${bar.id}">
+          📋 Kopier adresse
         </button>
-        <a href="${bar.url}" target="_blank" rel="noopener">Pilsguiden →</a>
       </div>
     </div>
   `;
@@ -358,40 +361,28 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-// Wires the share/copy button each time a popup opens. Popups are cached
+// Wires the copy-address button each time a popup opens. Popups are cached
 // on their marker by Leaflet (closing doesn't destroy the DOM), so guard
 // against re-wiring the same button on every reopen.
 map.on("popupopen", (e) => {
   const el = e.popup.getElement();
-  const btn = el && el.querySelector(".share-btn");
+  const btn = el && el.querySelector(".copy-btn");
   if (!btn || btn.dataset.wired) return;
   btn.dataset.wired = "1";
 
   btn.addEventListener("click", async () => {
     const bar = bars.find((b) => b.id === Number(btn.dataset.barId));
-    if (!bar) return;
-    const shareText = `${bar.name} – ${bar.address}`;
+    if (!bar || !navigator.clipboard) return;
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: bar.name, text: shareText, url: bar.url });
-      } catch {
-        // user cancelled the share sheet - nothing to do
-      }
-      return;
-    }
-
-    if (navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(shareText);
-        const original = btn.textContent;
-        btn.textContent = "✅ Kopiert!";
-        setTimeout(() => {
-          btn.textContent = original;
-        }, 1500);
-      } catch {
-        // clipboard blocked (permissions/insecure context) - nothing else we can do
-      }
+    try {
+      await navigator.clipboard.writeText(bar.address);
+      const original = btn.textContent;
+      btn.textContent = "✅ Kopiert!";
+      setTimeout(() => {
+        btn.textContent = original;
+      }, 1500);
+    } catch {
+      // clipboard blocked (permissions/insecure context) - nothing else we can do
     }
   });
 });
