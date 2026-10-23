@@ -125,6 +125,75 @@ let bars = [];
 let minPrice = 0;
 let maxPrice = 0;
 
+// Bar names only show up once zoomed in enough that there's realistically
+// room for them - below this, the dots alone are already dense (see
+// renderMarkers' collision-avoidance, which also has the final say on any
+// individual bar: this is just the "even bother checking" gate).
+const NAME_LABEL_MIN_ZOOM = 15;
+const labelMeasureCtx = document.createElement("canvas").getContext("2d");
+
+function nameLabelWidth(name) {
+  labelMeasureCtx.font = "700 11px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+  return labelMeasureCtx.measureText(name).width;
+}
+
+function rectsOverlap(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+// Markers currently on the map, kept outside renderMarkers so zoom/pan
+// handlers can re-run label placement without re-filtering the dataset.
+let currentMarkers = [];
+
+// Greedy label placement: dots (always shown) occupy space first, then
+// each bar - cheapest first, since that's what the app is for - tries a
+// label above its dot, then below, and goes label-less if neither pixel
+// rect is free. Re-run on every zoom/pan since screen positions and the
+// zoom gate both change.
+function updateNameLabels() {
+  if (map.getZoom() < NAME_LABEL_MIN_ZOOM) {
+    currentMarkers.forEach(({ marker }) => {
+      if (marker.getTooltip()) marker.unbindTooltip();
+    });
+    return;
+  }
+
+  const occupied = currentMarkers.map(({ marker, radius }) => {
+    const pt = map.latLngToLayerPoint(marker.getLatLng());
+    return { left: pt.x - radius, right: pt.x + radius, top: pt.y - radius, bottom: pt.y + radius };
+  });
+
+  const byPrice = [...currentMarkers].sort((a, b) => a.bar.pricePerHalfLiter - b.bar.pricePerHalfLiter);
+
+  byPrice.forEach(({ marker, bar, radius }) => {
+    const pt = map.latLngToLayerPoint(marker.getLatLng());
+    const halfWidth = nameLabelWidth(bar.name) / 2 + 4;
+    const labelHeight = 14;
+    const gap = 4;
+    const candidates = [
+      { dir: "top", top: pt.y - radius - gap - labelHeight },
+      { dir: "bottom", top: pt.y + radius + gap },
+    ].map((c) => ({ ...c, left: pt.x - halfWidth, right: pt.x + halfWidth, bottom: c.top + labelHeight }));
+
+    const fit = candidates.find((c) => !occupied.some((rect) => rectsOverlap(c, rect)));
+
+    if (marker.getTooltip()) marker.unbindTooltip();
+
+    if (fit) {
+      occupied.push(fit);
+      marker.bindTooltip(escapeHtml(bar.name), {
+        permanent: true,
+        direction: fit.dir,
+        offset: [0, fit.dir === "top" ? -radius : radius],
+        className: "bar-name-label",
+        interactive: false,
+      });
+    }
+  });
+}
+
+map.on("zoomend moveend", updateNameLabels);
+
 function daysSince(isoDate) {
   const then = new Date(isoDate).getTime();
   return (Date.now() - then) / (1000 * 60 * 60 * 24);
@@ -361,6 +430,8 @@ function renderMarkers(filterMin, filterMax) {
   const colorLo = inRangePrices.length ? Math.min(...inRangePrices) : filterMin;
   const colorHi = inRangePrices.length ? Math.max(...inRangePrices) : filterMax;
 
+  const radius = isMobile() ? DOT_RADIUS_MOBILE : DOT_RADIUS_DESKTOP;
+  currentMarkers = [];
   const barsToDraw = showNearby ? [...inRangeBars, ...nearbyBars] : inRangeBars;
   for (const bar of barsToDraw) {
     const fade = fadeFactor(bar.pricePerHalfLiter, filterMin, filterMax);
@@ -370,7 +441,9 @@ function renderMarkers(filterMin, filterMax) {
     });
     marker.bindPopup(popupHtml(bar));
     marker.addTo(markersLayer);
+    currentMarkers.push({ marker, bar, radius });
   }
+  updateNameLabels();
 
   document.getElementById("legend-min").textContent = `${colorLo} kr`;
   document.getElementById("legend-max").textContent = `${colorHi} kr`;
@@ -435,18 +508,8 @@ function setupSlider() {
     const loPct = ((lo - minPrice) / span) * 100;
     const hiPct = ((hi - minPrice) / span) * 100;
 
-    if (isMobile()) {
-      // Vertical track: 0% is the bottom (min), 100% is the top (max).
-      rangeEl.style.left = "";
-      rangeEl.style.right = "";
-      rangeEl.style.bottom = `${loPct}%`;
-      rangeEl.style.top = `${100 - hiPct}%`;
-    } else {
-      rangeEl.style.top = "";
-      rangeEl.style.bottom = "";
-      rangeEl.style.left = `${loPct}%`;
-      rangeEl.style.right = `${100 - hiPct}%`;
-    }
+    rangeEl.style.left = `${loPct}%`;
+    rangeEl.style.right = `${100 - hiPct}%`;
 
     label.textContent = `${lo} – ${hi} kr`;
     saveStored(STORAGE_KEYS.filter, { min: Number(minInput.value), max: Number(maxInput.value) });
@@ -591,12 +654,6 @@ async function init() {
   setupLocate();
   setupPanelDrag();
   setupNearbyToggle();
-
-  // Keep the map as the main event on mobile: the settings sheet starts
-  // tucked away behind its handle instead of covering ~40% of the screen.
-  if (isMobile()) {
-    document.getElementById("panel").classList.add("collapsed");
-  }
 }
 
 init();

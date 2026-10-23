@@ -446,6 +446,29 @@ html, body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+.leaflet-tooltip.bar-name-label {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 2px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    0 0 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.leaflet-tooltip.bar-name-label::before {
+  display: none;
+}
+
 .user-location-marker {
   width: 16px;
   height: 16px;
@@ -499,5 +522,34 @@ html, body {
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
+  }
+
+  /* Bigger thumbs for fingers, and the track inset from both edges so a
+     thumb parked at min/max never sits right at the edge of the sheet. */
+  .slider {
+    height: 32px;
+    margin: 0 16px;
+  }
+
+  .slider-track,
+  .slider-range {
+    top: 14px;
+  }
+
+  .slider input[type="range"] {
+    height: 32px;
+  }
+
+  .slider input[type="range"]::-webkit-slider-thumb {
+    width: 26px;
+    height: 26px;
+    border-width: 3px;
+    margin-top: 3px;
+  }
+
+  .slider input[type="range"]::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-width: 3px;
   }
 }
