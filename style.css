@@ -20,20 +20,27 @@ html, body {
   --hairline: #e9e9e9;
   --accent: #1f9d55;
   --accent-hover: #188046;
-  --panel-radius: 14px;
 }
 
+/* One layout for every screen size: a bottom sheet anchored to the viewport
+   edge, with a drag handle (see #panel-handle, setupPanelDrag in app.js)
+   that collapses it down to just the handle or re-expands it. Originally
+   mobile-only; unified onto desktop too since it reads just as well with a
+   mouse as with a thumb, and keeping one layout is one less thing to
+   maintain. */
 #panel {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.98);
-  border-radius: var(--panel-radius);
-  padding: 16px 18px;
-  width: 280px;
-  max-width: calc(100vw - 24px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 16px 16px 0 0;
+  padding: 0 16px;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.3);
   font-size: 14px;
   color: var(--ink);
 }
@@ -144,12 +151,13 @@ html, body {
 
 .slider {
   position: relative;
-  height: 24px;
+  height: 32px;
+  margin: 0 16px;
 }
 
 .slider-track {
   position: absolute;
-  top: 10px;
+  top: 14px;
   left: 0;
   right: 0;
   height: 4px;
@@ -159,7 +167,7 @@ html, body {
 
 .slider-range {
   position: absolute;
-  top: 10px;
+  top: 14px;
   height: 4px;
   background: var(--accent);
   border-radius: 2px;
@@ -170,6 +178,7 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
+  height: 32px;
   margin: 0;
   background: none;
   pointer-events: none;
@@ -181,22 +190,22 @@ html, body {
   pointer-events: auto;
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid var(--accent);
+  border: 3px solid var(--accent);
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 3px;
 }
 
 .slider input[type="range"]::-moz-range-thumb {
   pointer-events: auto;
-  width: 16px;
-  height: 16px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid var(--accent);
+  border: 3px solid var(--accent);
   cursor: pointer;
 }
 
@@ -216,7 +225,35 @@ html, body {
 }
 
 #panel-handle {
-  display: none;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 6px;
+  cursor: grab;
+  touch-action: none;
+}
+
+#panel-handle span {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ccc;
+}
+
+/* max-height is what actually collapses/expands (see app.js'
+   setupPanelDrag) so the transition can animate smoothly without fighting
+   the sheet's own position. */
+#panel-content {
+  max-height: 50vh;
+  overflow-y: auto;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  padding-bottom: 14px;
+}
+
+#panel.collapsed #panel-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .dot {
@@ -478,78 +515,3 @@ html, body {
   box-shadow: 0 0 0 2px #1a73e8, 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-@media (max-width: 640px) {
-  /* Bottom-sheet panel: anchored to the bottom edge, full width, with a
-     drag handle. #panel-content's max-height is what actually
-     collapses/expands (see app.js) so the transition can animate
-     smoothly without fighting the sheet's own position. */
-  #panel {
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding: 0 16px;
-    box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.3);
-  }
-
-  #panel-handle {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0 6px;
-    cursor: grab;
-    touch-action: none;
-  }
-
-  #panel-handle span {
-    width: 36px;
-    height: 4px;
-    border-radius: 2px;
-    background: #ccc;
-  }
-
-  #panel-content {
-    max-height: 50vh;
-    overflow-y: auto;
-    transition: max-height 0.25s ease, opacity 0.2s ease;
-    padding-bottom: 14px;
-  }
-
-  #panel.collapsed #panel-content {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Bigger thumbs for fingers, and the track inset from both edges so a
-     thumb parked at min/max never sits right at the edge of the sheet. */
-  .slider {
-    height: 32px;
-    margin: 0 16px;
-  }
-
-  .slider-track,
-  .slider-range {
-    top: 14px;
-  }
-
-  .slider input[type="range"] {
-    height: 32px;
-  }
-
-  .slider input[type="range"]::-webkit-slider-thumb {
-    width: 26px;
-    height: 26px;
-    border-width: 3px;
-    margin-top: 3px;
-  }
-
-  .slider input[type="range"]::-moz-range-thumb {
-    width: 26px;
-    height: 26px;
-    border-width: 3px;
-  }
-}

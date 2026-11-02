@@ -9,12 +9,6 @@ const OSLO_CENTER = [59.9139, 10.7522];
 // the price filter does - it's shown purely via the dashed border.
 const FADE_WINDOW_KR = 20;
 const FADE_START_OPACITY = 0.5;
-// Keep in sync with the breakpoint in style.css.
-const MOBILE_BREAKPOINT_PX = 640;
-
-function isMobile() {
-  return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches;
-}
 
 const STORAGE_KEYS = { filter: "olkartet:filter", view: "olkartet:view", showNearby: "olkartet:showNearby" };
 
@@ -267,12 +261,12 @@ function priceColor(price, lo, hi, alpha = 1) {
 }
 
 // Dot radius, doubled from the original plain-circle size as a first pass
-// at making the price number inside legible.
-const DOT_RADIUS_DESKTOP = 16;
-const DOT_RADIUS_MOBILE = 22;
+// at making the price number inside legible, then doubled again (same size
+// on every device, not just touchscreens) for easier tapping/clicking.
+const DOT_RADIUS = 22;
 
 function priceDotIcon(bar, color, stale) {
-  const radius = isMobile() ? DOT_RADIUS_MOBILE : DOT_RADIUS_DESKTOP;
+  const radius = DOT_RADIUS;
   const diameter = radius * 2;
   const fontSize = Math.round(diameter * 0.38);
   const borderColor = stale ? "#333" : "#1a1a1a";
@@ -421,7 +415,7 @@ function renderMarkers(filterMin, filterMax) {
   const colorLo = inRangePrices.length ? Math.min(...inRangePrices) : filterMin;
   const colorHi = inRangePrices.length ? Math.max(...inRangePrices) : filterMax;
 
-  const radius = isMobile() ? DOT_RADIUS_MOBILE : DOT_RADIUS_DESKTOP;
+  const radius = DOT_RADIUS;
   currentMarkers = [];
   const barsToDraw = showNearby ? [...inRangeBars, ...nearbyBars] : inRangeBars;
   for (const bar of barsToDraw) {
