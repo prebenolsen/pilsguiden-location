@@ -23,18 +23,34 @@ create table if not exists pilsguiden_location_profiles (
 
 alter table pilsguiden_location_profiles enable row level security;
 
+-- SECURITY DEFINER so checking admin status doesn't re-trigger RLS on this
+-- same table from inside a policy - an inline `exists (select ... from
+-- pilsguiden_location_profiles ...)` policy works for an authenticated
+-- user checking their own row (the "select own profile" policy below
+-- terminates it), but infinitely recurses for an anonymous caller
+-- (auth.uid() is null, so neither policy ever resolves). This function
+-- runs as its owner (bypassing RLS) and sidesteps that entirely - the
+-- standard Supabase pattern for this.
+create or replace function pilsguiden_location_is_admin()
+returns boolean
+language sql
+security definer set search_path = public
+stable
+as $$
+  select coalesce((select is_admin from pilsguiden_location_profiles where id = auth.uid()), false);
+$$;
+
+grant execute on function pilsguiden_location_is_admin() to anon, authenticated;
+
+drop policy if exists "select own profile" on pilsguiden_location_profiles;
 create policy "select own profile"
   on pilsguiden_location_profiles for select
   using (auth.uid() = id);
 
+drop policy if exists "admins select all profiles" on pilsguiden_location_profiles;
 create policy "admins select all profiles"
   on pilsguiden_location_profiles for select
-  using (
-    exists (
-      select 1 from pilsguiden_location_profiles p
-      where p.id = auth.uid() and p.is_admin
-    )
-  );
+  using (pilsguiden_location_is_admin());
 
 -- No insert/update policy for the authenticated role at all: profile rows
 -- are only ever written by the trigger below (new signups) or by you,
@@ -76,6 +92,7 @@ create table if not exists pilsguiden_location_bars (
 
 alter table pilsguiden_location_bars enable row level security;
 
+drop policy if exists "anyone can read community bars" on pilsguiden_location_bars;
 create policy "anyone can read community bars"
   on pilsguiden_location_bars for select
   using (true);
@@ -118,18 +135,15 @@ create index if not exists pilsguiden_location_price_reports_user_idx
 
 alter table pilsguiden_location_price_reports enable row level security;
 
+drop policy if exists "anyone can read active price reports" on pilsguiden_location_price_reports;
 create policy "anyone can read active price reports"
   on pilsguiden_location_price_reports for select
   using (removed_at is null);
 
+drop policy if exists "admins can read all price reports" on pilsguiden_location_price_reports;
 create policy "admins can read all price reports"
   on pilsguiden_location_price_reports for select
-  using (
-    exists (
-      select 1 from pilsguiden_location_profiles p
-      where p.id = auth.uid() and p.is_admin
-    )
-  );
+  using (pilsguiden_location_is_admin());
 
 -- No insert/update/delete policy for the authenticated role: rows are
 -- only ever written via submit_price_report / add_bar_with_price, and
@@ -263,9 +277,7 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  if not exists (
-    select 1 from pilsguiden_location_profiles where id = auth.uid() and is_admin
-  ) then
+  if not pilsguiden_location_is_admin() then
     raise exception 'Admin privileges required';
   end if;
 end;
