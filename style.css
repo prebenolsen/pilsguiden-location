@@ -70,26 +70,49 @@ html, body {
   margin: 0;
 }
 
-#locate-btn {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 7px 14px;
-  font-size: 13px;
-  font-weight: 600;
+/* Top-left map control, matching the built-in layers-switcher control's
+   look (white rounded box + shadow) but as a single icon button rather
+   than leaflet-bar's stacked-buttons style (which adds a divider border
+   meant for multiple buttons). */
+.locate-control {
+  width: 36px;
+  height: 36px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.locate-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #333;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  touch-action: manipulation;
 }
 
-#locate-btn:hover {
-  background: var(--accent-hover);
+.locate-control-btn:hover {
+  background: #f4f4f4;
 }
 
-#locate-status {
-  margin-left: 8px;
-  font-size: 12px;
-  color: var(--muted);
+.locate-control-btn.locating svg {
+  animation: locate-pulse 1s ease-in-out infinite;
+}
+
+.locate-control-btn.locate-error {
+  color: #c0392b;
+}
+
+@keyframes locate-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 #toggle-nearby-btn {

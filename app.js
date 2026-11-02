@@ -69,6 +69,14 @@ map.on("moveend", () => {
   saveStored(STORAGE_KEYS.view, { lat: center.lat, lng: center.lng, zoom: map.getZoom() });
 });
 
+// Tapping the bare map (not a marker/popup/control - those all stop this
+// event reaching here, per Leaflet convention) collapses the bottom sheet
+// out of the way, since that's almost always what someone wants right
+// after they've tapped the map itself.
+map.on("click", () => {
+  document.getElementById("panel").classList.add("collapsed");
+});
+
 const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const ESRI_GRAY_ATTRIBUTION = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, FAO, NOAA, USGS";
 
@@ -658,32 +666,81 @@ function setupPanelDrag() {
 
 let userMarker = null;
 
-function setupLocate() {
-  const btn = document.getElementById("locate-btn");
-  const status = document.getElementById("locate-status");
+// Crosshair/target glyph - the conventional "locate me" icon (Google Maps,
+// etc.), drawn with currentColor so it inherits the control's text color
+// (including the error-state red below) without a second icon asset.
+const LOCATE_ICON = `
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="12" y1="2" x2="12" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="12" y1="18" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="18" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+`;
 
-  btn.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      status.textContent = "Geolokasjon støttes ikke av nettleseren";
-      return;
-    }
-    status.textContent = "Lokaliserer...";
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        status.textContent = "";
-        if (userMarker) map.removeLayer(userMarker);
-        userMarker = L.marker([latitude, longitude], {
-          icon: L.divIcon({ className: "user-location-marker", iconSize: [16, 16] }),
-        }).addTo(map);
-        map.setView([latitude, longitude], 17);
-      },
-      (err) => {
-        status.textContent = err.code === 1 ? "Tilgang avslått" : "Fant ikke posisjon";
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  });
+function locateMe(btn) {
+  if (!navigator.geolocation) {
+    btn.title = "Geolokasjon støttes ikke av nettleseren";
+    return;
+  }
+  btn.classList.remove("locate-error");
+  btn.classList.add("locating");
+  btn.title = "Lokaliserer...";
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      btn.classList.remove("locating");
+      btn.title = "Finn meg";
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.marker([latitude, longitude], {
+        icon: L.divIcon({ className: "user-location-marker", iconSize: [16, 16] }),
+      }).addTo(map);
+      map.setView([latitude, longitude], 17);
+    },
+    (err) => {
+      btn.classList.remove("locating");
+      btn.classList.add("locate-error");
+      btn.title = err.code === 1 ? "Tilgang avslått" : "Fant ikke posisjon";
+      setTimeout(() => {
+        btn.classList.remove("locate-error");
+        btn.title = "Finn meg";
+      }, 2500);
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+// A custom Leaflet control (top-left, empty since zoomControl is off and
+// the layers switcher lives top-right) styled like the built-in map-layer
+// toggle: a single icon button, no label.
+const LocateControl = L.Control.extend({
+  options: { position: "topleft" },
+  onAdd() {
+    const container = L.DomUtil.create("div", "leaflet-control locate-control");
+    const link = L.DomUtil.create("a", "locate-control-btn", container);
+    link.href = "#";
+    link.title = "Finn meg";
+    link.setAttribute("role", "button");
+    link.setAttribute("aria-label", "Finn meg");
+    link.innerHTML = LOCATE_ICON;
+
+    // Matches how Leaflet's own controls behave: a click/scroll on the
+    // button shouldn't also reach the map underneath it (which would
+    // otherwise also collapse the panel via the map's own click handler).
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.on(link, "click", (e) => {
+      L.DomEvent.preventDefault(e);
+      locateMe(link);
+    });
+
+    return container;
+  },
+});
+
+function setupLocate() {
+  map.addControl(new LocateControl());
 }
 
 function setupAuthUI() {
