@@ -57,3 +57,14 @@ tiles, no build step:
   outline and reduced opacity, and flagged in the popup.
 - "Finn meg" requests browser geolocation and drops a blue marker at the
   user's position.
+
+## Community layer
+
+Anyone signed in with a Google account can add a new bar (by map pin,
+GPS, or address) and submit a beer price, which is merged into the map
+alongside the scraped Pilsguiden data (shown with a 👥 badge) — see
+`supabase_readme.md` for the one-time Supabase/Google OAuth setup and
+`supabase/schema.sql` for the schema. Submissions never overwrite
+history; a moderator can remove a user's submissions from the in-app
+admin panel, which reverts the displayed price to whatever was valid
+before.

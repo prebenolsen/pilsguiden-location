@@ -14,10 +14,51 @@
     <div id="panel-handle" aria-hidden="true"><span></span></div>
 
     <div id="panel-content">
+      <div class="row auth-row" id="auth-row">
+        <button type="button" id="google-signin-btn" class="auth-btn">🔑 Logg inn med Google</button>
+        <div id="user-chip" class="user-chip" hidden>
+          <span id="user-name"></span>
+          <button type="button" id="sign-out-btn" class="text-btn">Logg ut</button>
+        </div>
+      </div>
+
       <div class="row">
         <button id="locate-btn">📍 Finn meg</button>
         <span id="locate-status"></span>
       </div>
+
+      <div class="row">
+        <button type="button" id="add-bar-btn">➕ Legg til utested</button>
+      </div>
+
+      <form class="add-bar-form" id="add-bar-form" hidden>
+        <div class="add-bar-field">
+          <label for="add-bar-name">Navn</label>
+          <input type="text" id="add-bar-name" maxlength="120" required />
+        </div>
+        <div class="add-bar-field">
+          <label for="add-bar-address">Adresse (valgfritt)</label>
+          <div class="add-bar-address-row">
+            <input type="text" id="add-bar-address" maxlength="200" />
+            <button type="button" id="add-bar-geocode-btn" class="text-btn">Finn på kart</button>
+          </div>
+        </div>
+        <p class="add-bar-hint">Dra nålen i kartet for å justere plasseringen.</p>
+        <button type="button" id="add-bar-use-location-btn" class="text-btn">📍 Bruk min posisjon</button>
+        <div class="add-bar-field">
+          <label for="add-bar-size">Størrelse</label>
+          <select id="add-bar-size"></select>
+        </div>
+        <div class="add-bar-field">
+          <label for="add-bar-price">Pris (kr)</label>
+          <input type="number" id="add-bar-price" min="1" max="999" step="1" required />
+        </div>
+        <div class="add-bar-actions">
+          <button type="submit" id="add-bar-save-btn" class="popup-btn">Lagre</button>
+          <button type="button" id="add-bar-cancel-btn" class="text-btn">Avbryt</button>
+        </div>
+        <p class="add-bar-status" id="add-bar-status"></p>
+      </form>
 
       <div class="row price-filter">
         <div class="price-filter-controls">
@@ -60,11 +101,19 @@
           <span class="shape-sample shape-circle"></span> vanlig pris
           <span class="shape-sample shape-square"></span> happy hour
         </div>
+        <div class="community-note">
+          <span class="community-badge-sample">👥</span> pris meldt inn av brukere
+        </div>
+      </details>
+
+      <details class="info-disclosure admin-panel" id="admin-panel" hidden>
+        <summary>🛡 Admin</summary>
+        <div class="admin-feed" id="admin-feed"></div>
       </details>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

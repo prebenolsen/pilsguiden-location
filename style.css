@@ -2,6 +2,15 @@
   box-sizing: border-box;
 }
 
+/* Several elements below set their own `display` (flex, etc.) at the same
+   specificity as the browser's default `[hidden] { display: none }` rule,
+   which - since author rules beat UA rules regardless of specificity -
+   would otherwise make `hidden` a no-op on them. This keeps `hidden`
+   authoritative everywhere. */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   margin: 0;
   height: 100%;
@@ -513,5 +522,235 @@ html, body {
   background: #1a73e8;
   border: 3px solid #fff;
   box-shadow: 0 0 0 2px #1a73e8, 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   Community layer: Google login, add-a-bar, price submission, admin panel
+   ============================================================ */
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.auth-btn {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.auth-btn:hover {
+  background: #f5f5f5;
+  border-color: #ddd;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  min-width: 0;
+}
+
+.user-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.text-btn:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+#add-bar-btn {
+  background: none;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#add-bar-btn:hover {
+  background: rgba(31, 157, 85, 0.08);
+}
+
+.add-bar-form {
+  margin: 4px 0 12px;
+  padding: 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-bar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.add-bar-field label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.add-bar-field input,
+.add-bar-field select {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+}
+
+.add-bar-address-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.add-bar-address-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-bar-hint {
+  margin: 0;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.add-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.add-bar-status {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  min-height: 1.2em;
+}
+
+.add-bar-marker {
+  width: 22px;
+  height: 22px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  transform: rotate(-45deg);
+}
+
+.bar-popup .community-badge {
+  font-size: 12px;
+  color: #1a73e8;
+  margin-bottom: 4px;
+}
+
+.community-note {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popup-submit-price {
+  margin-top: 10px;
+}
+
+.price-submit-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.price-submit-form select,
+.price-submit-form input {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+}
+
+.price-submit-form .price-submit-amount {
+  width: 70px;
+}
+
+.price-submit-status {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.admin-panel .admin-feed {
+  margin-top: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-row {
+  padding: 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.admin-row--removed {
+  opacity: 0.55;
+}
+
+.admin-row-main {
+  margin-bottom: 2px;
+}
+
+.admin-row-meta {
+  color: var(--muted);
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
 }
 

@@ -1,3 +1,5 @@
+import * as Community from "./community.js";
+
 const STALE_DAYS = 14;
 const OSLO_CENTER = [59.9139, 10.7522];
 // Bars just outside the slider range fade out gradually instead of
@@ -114,9 +116,19 @@ map.on("baselayerchange", (e) => saveStored(STORAGE_KEY_BASE_LAYER, e.name));
 
 const markersLayer = L.layerGroup().addTo(map);
 
-let bars = [];
+let scrapedBars = []; // pristine catalogue from data/bars.json, never mutated
+let bars = []; // scrapedBars merged with community data - what's actually rendered
 let minPrice = 0;
 let maxPrice = 0;
+
+// Rebuilds `bars` from the pristine scraped catalogue + whatever community
+// data is currently cached in community.js. Always starts from
+// `scrapedBars` (never the previous `bars`) so spreadOverlappingBars below
+// doesn't compound its in-place lat/lng nudging across repeated merges.
+function rebuildBars() {
+  bars = Community.mergeBars(scrapedBars);
+  spreadOverlappingBars(bars);
+}
 
 // Bar names only show up once zoomed in enough that there's realistically
 // room for them - below this, the dots alone are already dense (see
@@ -328,22 +340,48 @@ function popupHtml(bar) {
     ? `<div class="valid-to${happyHour ? " time-limited" : ""}">${happyHour ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}${countdownHtml}</div>`
     : "";
   const metaHtml = bar.brewery ? `<div class="meta">Bryggeri: ${escapeHtml(bar.brewery)}</div>` : "";
-  const addressLabel = `${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}`;
-
-  return `
-    <div class="bar-popup">
-      <h3>${escapeHtml(bar.name)}</h3>
-      <div class="price">${bar.pricePerHalfLiter} kr / 0,5L</div>
-      ${validToHtml}
-      ${metaHtml}
-      ${staleHtml}
-      <div class="popup-actions">
+  const addressLabel = bar.address
+    ? `${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}`
+    : "";
+  const addressActionHtml = bar.address
+    ? `
         <a class="popup-btn address-btn" href="${directionsUrl(bar)}" target="_blank" rel="noopener" title="Åpne veibeskrivelse i kart-app">
           📍 ${addressLabel}${EXTERNAL_LINK_ICON}
         </a>
         <button type="button" class="popup-btn copy-btn" data-bar-id="${bar.id}">
           📋 Kopier adresse
         </button>
+      `
+    : "";
+  const communityHtml = bar.communitySourced
+    ? `<div class="community-badge">👥 Pris meldt inn av brukere</div>`
+    : "";
+  const priceRefAttrs = bar.priceRef.scrapedBarId != null
+    ? `data-scraped-bar-id="${bar.priceRef.scrapedBarId}"`
+    : `data-community-bar-id="${bar.priceRef.communityBarId}"`;
+  const sizeOptionsHtml = Community.SIZE_OPTIONS.map(
+    (opt) => `<option value="${opt.value}">${escapeHtml(opt.label)}</option>`
+  ).join("");
+
+  return `
+    <div class="bar-popup">
+      <h3>${escapeHtml(bar.name)}</h3>
+      <div class="price">${Math.round(bar.pricePerHalfLiter)} kr / 0,5L</div>
+      ${communityHtml}
+      ${validToHtml}
+      ${metaHtml}
+      ${staleHtml}
+      <div class="popup-actions">
+        ${addressActionHtml}
+      </div>
+      <div class="popup-submit-price">
+        <button type="button" class="popup-btn submit-price-toggle">💶 Meld inn pris</button>
+        <form class="price-submit-form" ${priceRefAttrs} hidden>
+          <select class="price-submit-size">${sizeOptionsHtml}</select>
+          <input type="number" class="price-submit-amount" placeholder="kr" min="1" max="999" step="1" required />
+          <button type="submit" class="popup-btn">Send</button>
+          <span class="price-submit-status"></span>
+        </form>
       </div>
     </div>
   `;
@@ -355,17 +393,15 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-// Wires the copy-address button each time a popup opens. Popups are cached
-// on their marker by Leaflet (closing doesn't destroy the DOM), so guard
-// against re-wiring the same button on every reopen.
-map.on("popupopen", (e) => {
-  const el = e.popup.getElement();
-  const btn = el && el.querySelector(".copy-btn");
+function wireCopyButton(el) {
+  const btn = el.querySelector(".copy-btn");
   if (!btn || btn.dataset.wired) return;
   btn.dataset.wired = "1";
 
   btn.addEventListener("click", async () => {
-    const bar = bars.find((b) => b.id === Number(btn.dataset.barId));
+    // Bar ids are numeric for scraped bars, "community-<uuid>" strings for
+    // community ones - compare as strings so both match.
+    const bar = bars.find((b) => String(b.id) === btn.dataset.barId);
     if (!bar || !navigator.clipboard) return;
 
     try {
@@ -379,6 +415,59 @@ map.on("popupopen", (e) => {
       // clipboard blocked (permissions/insecure context) - nothing else we can do
     }
   });
+}
+
+function wirePriceSubmitForm(el) {
+  const toggle = el.querySelector(".submit-price-toggle");
+  const form = el.querySelector(".price-submit-form");
+  if (!toggle || !form || toggle.dataset.wired) return;
+  toggle.dataset.wired = "1";
+
+  toggle.addEventListener("click", () => {
+    if (!Community.isSignedIn()) {
+      Community.signInWithGoogle();
+      return;
+    }
+    form.hidden = !form.hidden;
+  });
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const statusEl = form.querySelector(".price-submit-status");
+    const sizeLabel = form.querySelector(".price-submit-size").value;
+    const rawPrice = Number(form.querySelector(".price-submit-amount").value);
+    const submitBtn = form.querySelector("button[type=submit]");
+
+    if (!rawPrice || rawPrice <= 0) {
+      statusEl.textContent = "Skriv inn en gyldig pris.";
+      return;
+    }
+
+    const scrapedBarId = form.dataset.scrapedBarId ? Number(form.dataset.scrapedBarId) : null;
+    const communityBarId = form.dataset.communityBarId || null;
+
+    submitBtn.disabled = true;
+    statusEl.textContent = "Sender...";
+    try {
+      await Community.submitPriceReport({ scrapedBarId, communityBarId, sizeLabel, rawPrice });
+      statusEl.textContent = "Takk! Prisen er oppdatert.";
+      // The resulting data refresh re-renders all markers/popups shortly
+      // after this, which closes this popup - the message above is mostly
+      // for the instant before that happens.
+    } catch (err) {
+      submitBtn.disabled = false;
+      statusEl.textContent = err.message || "Noe gikk galt.";
+    }
+  });
+}
+
+// Popups are cached on their marker by Leaflet (closing doesn't destroy the
+// DOM), so each wire-up function guards against re-wiring on every reopen.
+map.on("popupopen", (e) => {
+  const el = e.popup.getElement();
+  if (!el) return;
+  wireCopyButton(el);
+  wirePriceSubmitForm(el);
 });
 
 // 1 (fully opaque) inside the filter range. The instant a bar is outside
@@ -517,9 +606,8 @@ function setupSlider() {
   update();
 }
 
-// Bottom-sheet drag-to-collapse behavior for the mobile panel. Harmless
-// on desktop since #panel-handle is display:none there, so the handle
-// never receives pointer events.
+// Bottom-sheet drag-to-collapse behavior for the panel (see style.css -
+// one layout for every screen size, no mobile/desktop split).
 function setupPanelDrag() {
   const panel = document.getElementById("panel");
   const handle = document.getElementById("panel-handle");
@@ -598,6 +686,220 @@ function setupLocate() {
   });
 }
 
+function setupAuthUI() {
+  document.getElementById("google-signin-btn").addEventListener("click", () => {
+    Community.signInWithGoogle();
+  });
+  document.getElementById("sign-out-btn").addEventListener("click", () => {
+    Community.signOut();
+  });
+}
+
+function updateAuthUI() {
+  const signInBtn = document.getElementById("google-signin-btn");
+  const chip = document.getElementById("user-chip");
+  const nameEl = document.getElementById("user-name");
+
+  if (Community.isSignedIn()) {
+    const profile = Community.getProfile();
+    signInBtn.hidden = true;
+    chip.hidden = false;
+    nameEl.textContent = (profile && (profile.display_name || profile.email)) || Community.getSession().user.email;
+  } else {
+    signInBtn.hidden = false;
+    chip.hidden = true;
+  }
+}
+
+function updateAdminVisibility() {
+  document.getElementById("admin-panel").hidden = !Community.isAdmin();
+}
+
+function adminRowHtml(row) {
+  const barLabel = row.community_bar_name || `Pilsguiden-bar #${row.scraped_bar_id}`;
+  const removed = Boolean(row.removed_at);
+  const createdLabel = new Date(row.created_at).toLocaleString("no-NO");
+  const actionsHtml = removed
+    ? `<button type="button" class="text-btn admin-restore-btn" data-report-id="${row.id}">Gjenopprett</button>`
+    : `
+        <button type="button" class="text-btn admin-remove-btn" data-report-id="${row.id}">Fjern</button>
+        <button type="button" class="text-btn admin-remove-user-btn" data-user-id="${row.user_id}">Fjern alle fra denne brukeren</button>
+      `;
+
+  return `
+    <div class="admin-row${removed ? " admin-row--removed" : ""}">
+      <div class="admin-row-main">
+        <strong>${escapeHtml(barLabel)}</strong>
+        – ${row.raw_price} kr / ${escapeHtml(row.size_label)}
+        (${Math.round(row.price_per_half_liter)} kr/0,5L)
+      </div>
+      <div class="admin-row-meta">${escapeHtml(row.user_email)} · ${createdLabel}</div>
+      ${removed ? `<div class="admin-row-meta">Fjernet${row.removed_reason ? `: ${escapeHtml(row.removed_reason)}` : ""}</div>` : ""}
+      <div class="admin-row-actions">${actionsHtml}</div>
+    </div>
+  `;
+}
+
+async function renderAdminFeed() {
+  const feedEl = document.getElementById("admin-feed");
+  feedEl.textContent = "Laster...";
+  try {
+    const rows = await Community.fetchAdminFeed();
+    feedEl.innerHTML = rows.map(adminRowHtml).join("") || "<p>Ingen innmeldinger ennå.</p>";
+  } catch (err) {
+    feedEl.textContent = err.message || "Klarte ikke å laste innmeldinger.";
+  }
+}
+
+function setupAdminPanel() {
+  const details = document.getElementById("admin-panel");
+  const feedEl = document.getElementById("admin-feed");
+
+  details.addEventListener("toggle", () => {
+    if (details.open) renderAdminFeed();
+  });
+
+  feedEl.addEventListener("click", async (ev) => {
+    const removeBtn = ev.target.closest(".admin-remove-btn");
+    const removeUserBtn = ev.target.closest(".admin-remove-user-btn");
+    const restoreBtn = ev.target.closest(".admin-restore-btn");
+
+    if (removeBtn) {
+      const reason = window.prompt("Begrunnelse (valgfritt):") || "";
+      await Community.adminRemoveReport(removeBtn.dataset.reportId, reason);
+      renderAdminFeed();
+    } else if (removeUserBtn) {
+      if (!window.confirm("Fjerner ALLE innmeldinger fra denne brukeren. Er du sikker?")) return;
+      const reason = window.prompt("Begrunnelse (valgfritt):") || "";
+      await Community.adminRemoveUserReports(removeUserBtn.dataset.userId, reason);
+      renderAdminFeed();
+    } else if (restoreBtn) {
+      await Community.adminRestoreReport(restoreBtn.dataset.reportId);
+      renderAdminFeed();
+    }
+  });
+}
+
+// "Legg til utested": a draggable pin the user positions via their
+// location, a geocoded address, or just dragging it by hand, paired with a
+// form for the bar's name and its first price. Submits atomically through
+// Community.addBarWithPrice (one bar + one price report, see
+// supabase/schema.sql) so a bar never exists without a price.
+let addBarMarker = null;
+
+function setupAddBarFlow() {
+  const btn = document.getElementById("add-bar-btn");
+  const form = document.getElementById("add-bar-form");
+  const nameInput = document.getElementById("add-bar-name");
+  const addressInput = document.getElementById("add-bar-address");
+  const geocodeBtn = document.getElementById("add-bar-geocode-btn");
+  const useLocationBtn = document.getElementById("add-bar-use-location-btn");
+  const sizeSelect = document.getElementById("add-bar-size");
+  const priceInput = document.getElementById("add-bar-price");
+  const cancelBtn = document.getElementById("add-bar-cancel-btn");
+  const statusEl = document.getElementById("add-bar-status");
+
+  sizeSelect.innerHTML = Community.SIZE_OPTIONS.map(
+    (opt) => `<option value="${opt.value}">${opt.label}</option>`
+  ).join("");
+
+  function placeMarkerAt(latlng) {
+    if (addBarMarker) {
+      addBarMarker.setLatLng(latlng);
+    } else {
+      addBarMarker = L.marker(latlng, {
+        draggable: true,
+        icon: L.divIcon({ className: "add-bar-marker", iconSize: [22, 22], iconAnchor: [11, 11] }),
+      }).addTo(map);
+    }
+    map.panTo(latlng);
+  }
+
+  function closeForm() {
+    form.hidden = true;
+    statusEl.textContent = "";
+    form.reset();
+    if (addBarMarker) {
+      map.removeLayer(addBarMarker);
+      addBarMarker = null;
+    }
+  }
+
+  btn.addEventListener("click", () => {
+    if (!Community.isSignedIn()) {
+      Community.signInWithGoogle();
+      return;
+    }
+    if (!form.hidden) {
+      closeForm();
+      return;
+    }
+    form.hidden = false;
+    placeMarkerAt(map.getCenter());
+  });
+
+  geocodeBtn.addEventListener("click", async () => {
+    const query = addressInput.value.trim();
+    if (!query) return;
+    statusEl.textContent = "Søker...";
+    try {
+      const pos = await Community.geocodeAddress(query);
+      if (!pos) {
+        statusEl.textContent = "Fant ikke adressen – dra nålen dit manuelt.";
+        return;
+      }
+      placeMarkerAt([pos.lat, pos.lng]);
+      statusEl.textContent = "";
+    } catch (err) {
+      statusEl.textContent = err.message || "Klarte ikke å søke opp adressen.";
+    }
+  });
+
+  useLocationBtn.addEventListener("click", () => {
+    if (!navigator.geolocation) return;
+    statusEl.textContent = "Lokaliserer...";
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        placeMarkerAt([pos.coords.latitude, pos.coords.longitude]);
+        statusEl.textContent = "";
+      },
+      () => {
+        statusEl.textContent = "Fant ikke posisjonen din.";
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+
+  cancelBtn.addEventListener("click", closeForm);
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const name = nameInput.value.trim();
+    const rawPrice = Number(priceInput.value);
+
+    if (!name || !addBarMarker || !rawPrice || rawPrice <= 0) {
+      statusEl.textContent = "Fyll ut navn og pris, og plasser nålen i kartet.";
+      return;
+    }
+
+    statusEl.textContent = "Lagrer...";
+    try {
+      const { lat, lng } = addBarMarker.getLatLng();
+      await Community.addBarWithPrice({
+        name,
+        address: addressInput.value.trim(),
+        lat,
+        lng,
+        sizeLabel: sizeSelect.value,
+        rawPrice,
+      });
+      closeForm();
+    } catch (err) {
+      statusEl.textContent = err.message || "Noe gikk galt.";
+    }
+  });
+}
+
 // Bars sharing an exact address (e.g. three food stalls all registered to
 // the same street number, like Torggata 18) geocode to the exact same
 // point and would otherwise stack into one pin, hiding the rest. Nudge
@@ -628,8 +930,10 @@ function spreadOverlappingBars(barList) {
 async function init() {
   const res = await fetch("data/bars.json");
   const catalogue = await res.json();
-  bars = catalogue.bars;
-  spreadOverlappingBars(bars);
+  scrapedBars = catalogue.bars;
+
+  await Community.initCommunity();
+  rebuildBars();
 
   const prices = bars.map((b) => b.pricePerHalfLiter);
   minPrice = Math.min(...prices);
@@ -639,6 +943,23 @@ async function init() {
   setupLocate();
   setupPanelDrag();
   setupNearbyToggle();
+  setupAuthUI();
+  setupAddBarFlow();
+  setupAdminPanel();
+  updateAuthUI();
+  updateAdminVisibility();
+
+  // Re-render whenever a submission/moderation changes the community data
+  // (own and other users' - everyone's refreshCommunityData is the same
+  // read), and refresh the auth-dependent UI whenever sign-in state changes.
+  Community.onCommunityDataChanged(() => {
+    rebuildBars();
+    renderMarkers(currentFilter.min, currentFilter.max);
+  });
+  Community.onAuthChanged(() => {
+    updateAuthUI();
+    updateAdminVisibility();
+  });
 }
 
 init();
