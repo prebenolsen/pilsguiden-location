@@ -10,10 +10,15 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config.js";
 
 export const SIZE_OPTIONS = [
+  { value: "0.25", label: "0,25 L" },
+  { value: "0.3", label: "0,3 L" },
   { value: "0.33", label: "0,33 L" },
+  { value: "0.35", label: "0,35 L" },
   { value: "0.4", label: "0,4 L" },
+  { value: "0.45", label: "0,45 L" },
   { value: "0.5", label: "0,5 L" },
   { value: "pint", label: "Pint (engelsk, 0,57 L)" },
+  { value: "0.6", label: "0,6 L" },
 ];
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
