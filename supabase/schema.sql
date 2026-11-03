@@ -84,11 +84,15 @@ create table if not exists pilsguiden_location_bars (
   id uuid primary key default gen_random_uuid(),
   name text not null check (char_length(trim(name)) > 0),
   address text,
+  brewery text,
   lat double precision not null check (lat between -90 and 90),
   lng double precision not null check (lng between -180 and 180),
   created_by uuid references pilsguiden_location_profiles(id),
   created_at timestamptz not null default now()
 );
+
+-- Safe to re-run on a database created before this column existed.
+alter table pilsguiden_location_bars add column if not exists brewery text;
 
 alter table pilsguiden_location_bars enable row level security;
 
@@ -110,7 +114,7 @@ create table if not exists pilsguiden_location_price_reports (
   scraped_bar_id integer,
   community_bar_id uuid references pilsguiden_location_bars(id),
   user_id uuid not null references pilsguiden_location_profiles(id),
-  size_label text not null check (size_label in ('0.33', '0.4', '0.5', 'pint')),
+  size_label text not null check (size_label in ('0.25', '0.3', '0.33', '0.35', '0.4', '0.45', '0.5', 'pint', '0.6')),
   raw_price numeric not null check (raw_price > 0 and raw_price < 1000),
   price_per_half_liter numeric not null check (price_per_half_liter > 0 and price_per_half_liter < 2000),
   created_at timestamptz not null default now(),
@@ -121,6 +125,14 @@ create table if not exists pilsguiden_location_price_reports (
     (scraped_bar_id is not null)::int + (community_bar_id is not null)::int = 1
   )
 );
+
+-- Safe to re-run against a database created before 0.25/0.3/0.35/0.45/0.6
+-- were added to community.js's SIZE_OPTIONS: Postgres names an inline
+-- column check constraint "<table>_<column>_check" by default, so this
+-- targets and replaces that same auto-generated name.
+alter table pilsguiden_location_price_reports drop constraint if exists pilsguiden_location_price_reports_size_label_check;
+alter table pilsguiden_location_price_reports add constraint pilsguiden_location_price_reports_size_label_check
+  check (size_label in ('0.25', '0.3', '0.33', '0.35', '0.4', '0.45', '0.5', 'pint', '0.6'));
 
 create index if not exists pilsguiden_location_price_reports_scraped_bar_idx
   on pilsguiden_location_price_reports (scraped_bar_id, created_at desc)
@@ -183,10 +195,15 @@ language sql
 immutable
 as $$
   select raw_price * 0.5 / case size_label
+    when '0.25' then 0.25
+    when '0.3' then 0.3
     when '0.33' then 0.33
+    when '0.35' then 0.35
     when '0.4' then 0.4
+    when '0.45' then 0.45
     when '0.5' then 0.5
     when 'pint' then 0.568
+    when '0.6' then 0.6
   end;
 $$;
 
@@ -232,9 +249,16 @@ $$;
 
 grant execute on function pilsguiden_location_submit_price_report(integer, uuid, text, numeric) to authenticated;
 
+-- Signature changed (added p_brewery) after the original 6-arg version
+-- shipped, so the old overload is dropped explicitly - "create or replace"
+-- only replaces a function with the exact same argument list, otherwise it
+-- just adds a second overload and leaves the stale one callable.
+drop function if exists pilsguiden_location_add_bar_with_price(text, text, double precision, double precision, text, numeric);
+
 create or replace function pilsguiden_location_add_bar_with_price(
   p_name text,
   p_address text,
+  p_brewery text,
   p_lat double precision,
   p_lng double precision,
   p_size_label text,
@@ -251,8 +275,8 @@ begin
     raise exception 'Must be signed in to add a bar';
   end if;
 
-  insert into pilsguiden_location_bars (name, address, lat, lng, created_by)
-  values (p_name, p_address, p_lat, p_lng, auth.uid())
+  insert into pilsguiden_location_bars (name, address, brewery, lat, lng, created_by)
+  values (p_name, p_address, p_brewery, p_lat, p_lng, auth.uid())
   returning * into new_bar;
 
   insert into pilsguiden_location_price_reports
@@ -269,7 +293,7 @@ begin
 end;
 $$;
 
-grant execute on function pilsguiden_location_add_bar_with_price(text, text, double precision, double precision, text, numeric) to authenticated;
+grant execute on function pilsguiden_location_add_bar_with_price(text, text, text, double precision, double precision, text, numeric) to authenticated;
 
 create or replace function pilsguiden_location_assert_admin()
 returns void

@@ -96,7 +96,7 @@ export async function signOut() {
 // Call after any write (submit/add/moderate) and once at startup.
 export async function refreshCommunityData() {
   const [barsRes, pricesRes] = await Promise.all([
-    supabase.from("pilsguiden_location_bars").select("id, name, address, lat, lng, created_by, created_at"),
+    supabase.from("pilsguiden_location_bars").select("id, name, address, brewery, lat, lng, created_by, created_at"),
     supabase.from("pilsguiden_location_current_prices").select("*"),
   ]);
 
@@ -144,6 +144,7 @@ export function mergeBars(scrapedBars) {
         id: `community-${bar.id}`,
         name: bar.name,
         address: bar.address,
+        brewery: bar.brewery,
         lat: bar.lat,
         lng: bar.lng,
         pricePerHalfLiter: report.price_per_half_liter,
@@ -170,11 +171,12 @@ export async function submitPriceReport({ scrapedBarId, communityBarId, sizeLabe
   return data;
 }
 
-export async function addBarWithPrice({ name, address, lat, lng, sizeLabel, rawPrice }) {
+export async function addBarWithPrice({ name, address, brewery, lat, lng, sizeLabel, rawPrice }) {
   if (!isSignedIn()) throw new Error("Du må logge inn for å legge til et utested.");
   const { data, error } = await supabase.rpc("pilsguiden_location_add_bar_with_price", {
     p_name: name,
     p_address: address || null,
+    p_brewery: brewery || null,
     p_lat: lat,
     p_lng: lng,
     p_size_label: sizeLabel,

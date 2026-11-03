@@ -851,6 +851,8 @@ function setupAddBarFlow() {
   const addressInput = document.getElementById("add-bar-address");
   const geocodeBtn = document.getElementById("add-bar-geocode-btn");
   const useLocationBtn = document.getElementById("add-bar-use-location-btn");
+  const breweryInput = document.getElementById("add-bar-brewery");
+  const breweryList = document.getElementById("add-bar-brewery-list");
   const sizeSelect = document.getElementById("add-bar-size");
   const priceInput = document.getElementById("add-bar-price");
   const cancelBtn = document.getElementById("add-bar-cancel-btn");
@@ -859,6 +861,15 @@ function setupAddBarFlow() {
   sizeSelect.innerHTML = Community.SIZE_OPTIONS.map(
     (opt) => `<option value="${opt.value}">${opt.label}</option>`
   ).join("");
+
+  // Suggests breweries already known from the scraped catalogue (bars.json's
+  // "brewery" field) so a contributor can pick an existing one instead of
+  // retyping/misspelling it; the input stays free-text for a brewery that
+  // isn't in there yet.
+  const knownBreweries = [...new Set(scrapedBars.map((b) => b.brewery).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b, "no")
+  );
+  breweryList.innerHTML = knownBreweries.map((name) => `<option value="${escapeHtml(name)}"></option>`).join("");
 
   function placeMarkerAt(latlng) {
     if (addBarMarker) {
@@ -945,6 +956,7 @@ function setupAddBarFlow() {
       await Community.addBarWithPrice({
         name,
         address: addressInput.value.trim(),
+        brewery: breweryInput.value.trim(),
         lat,
         lng,
         sizeLabel: sizeSelect.value,
