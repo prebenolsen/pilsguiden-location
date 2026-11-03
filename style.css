@@ -426,17 +426,8 @@ html, body {
 
 .bar-popup .valid-to {
   font-size: 12px;
-  color: #2a7a2a;
-  margin-bottom: 4px;
-}
-
-.bar-popup .valid-to.time-limited {
   color: #b35900;
-}
-
-.bar-popup .meta {
-  font-size: 12px;
-  color: #444;
+  margin-bottom: 4px;
 }
 
 .bar-popup .stale-warning {

@@ -344,10 +344,13 @@ function popupHtml(bar) {
     remaining !== null
       ? ` – stiger til vanlig pris om ${remaining > 60 ? `${Math.floor(remaining / 60)}t ${remaining % 60}min` : `${remaining} min`}`
       : "";
-  const validToHtml = bar.validTo
-    ? `<div class="valid-to${happyHour ? " time-limited" : ""}">${happyHour ? "🕒" : "✅"} ${escapeHtml(bar.validTo)}${countdownHtml}</div>`
+  // Only a time-limited (happy-hour) price has anything worth telling the
+  // user about its validity - the "always valid" case (defaultPrice: true)
+  // is just the bar's everyday price and needs no caveat.
+  const validToHtml = happyHour && bar.validTo
+    ? `<div class="valid-to">🕒 ${escapeHtml(bar.validTo)}${countdownHtml}</div>`
     : "";
-  const metaHtml = bar.brewery ? `<div class="meta">Bryggeri: ${escapeHtml(bar.brewery)}</div>` : "";
+  const breweryHtml = bar.brewery ? ` (${escapeHtml(bar.brewery)})` : "";
   const addressLabel = bar.address
     ? `${escapeHtml(bar.address)}${bar.approxLocation ? " (omtrentlig plassering)" : ""}`
     : "";
@@ -374,10 +377,9 @@ function popupHtml(bar) {
   return `
     <div class="bar-popup">
       <h3>${escapeHtml(bar.name)}</h3>
-      <div class="price">${Math.round(bar.pricePerHalfLiter)} kr / 0,5L</div>
+      <div class="price">${Math.round(bar.pricePerHalfLiter)} kr / 0,5L${breweryHtml}</div>
       ${communityHtml}
       ${validToHtml}
-      ${metaHtml}
       ${staleHtml}
       <div class="popup-actions">
         ${addressActionHtml}
