@@ -68,3 +68,4 @@ alongside the scraped Pilsguiden data (shown with a 👥 badge) — see
 history; a moderator can remove a user's submissions from the in-app
 admin panel, which reverts the displayed price to whatever was valid
 before.
+
