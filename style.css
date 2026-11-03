@@ -54,6 +54,26 @@ html, body {
   color: var(--ink);
 }
 
+/* On wide viewports a full-bleed bottom sheet reads as a mobile layout
+   stretched too far. Pin it as a compact card in the bottom-left corner
+   instead (matching where Google Maps-style place cards sit), clear of the
+   top-left/top-right map controls and the bottom-right attribution. */
+@media (min-width: 700px) {
+  #panel {
+    left: 16px;
+    right: auto;
+    bottom: 16px;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  #panel-content {
+    max-height: 70vh;
+  }
+}
+
 #panel h1 {
   font-size: 17px;
   font-weight: 700;
