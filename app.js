@@ -144,10 +144,19 @@ function rebuildBars() {
 // individual bar: this is just the "even bother checking" gate).
 const NAME_LABEL_MIN_ZOOM = 15;
 const labelMeasureCtx = document.createElement("canvas").getContext("2d");
+labelMeasureCtx.font = "700 11px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
+// Bar names repeat across renders (every slider tick, every pan/zoom), and
+// measureText is the one part of label placement that can't be made O(1)
+// via the grid below - so cache it instead, keyed by the name itself.
+const labelWidthCache = new Map();
 function nameLabelWidth(name) {
-  labelMeasureCtx.font = "700 11px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
-  return labelMeasureCtx.measureText(name).width;
+  let width = labelWidthCache.get(name);
+  if (width === undefined) {
+    width = labelMeasureCtx.measureText(name).width;
+    labelWidthCache.set(name, width);
+  }
+  return width;
 }
 
 function rectsOverlap(a, b) {
@@ -157,6 +166,27 @@ function rectsOverlap(a, b) {
 // Markers currently on the map, kept outside renderMarkers so zoom/pan
 // handlers can re-run label placement without re-filtering the dataset.
 let currentMarkers = [];
+
+// Spatial hash for the greedy placement below: checking a candidate rect
+// against "every rect placed so far" is O(n) per bar (O(n^2) overall) once
+// there are hundreds of bars on screen. Bucketing rects into fixed-size
+// cells and only checking the handful of cells a candidate overlaps turns
+// that into ~O(1) per check.
+const LABEL_GRID_CELL = 60;
+
+function labelGridCells(rect) {
+  const cells = [];
+  const minCx = Math.floor(rect.left / LABEL_GRID_CELL);
+  const maxCx = Math.floor(rect.right / LABEL_GRID_CELL);
+  const minCy = Math.floor(rect.top / LABEL_GRID_CELL);
+  const maxCy = Math.floor(rect.bottom / LABEL_GRID_CELL);
+  for (let cx = minCx; cx <= maxCx; cx++) {
+    for (let cy = minCy; cy <= maxCy; cy++) {
+      cells.push(`${cx},${cy}`);
+    }
+  }
+  return cells;
+}
 
 // Greedy label placement: dots (always shown) occupy space first, then
 // each bar - cheapest first, since that's what the app is for - tries a
@@ -171,9 +201,25 @@ function updateNameLabels() {
     return;
   }
 
-  const occupied = currentMarkers.map(({ marker, radius }) => {
+  const grid = new Map(); // cellKey -> rect[]
+  function occupy(rect) {
+    for (const key of labelGridCells(rect)) {
+      let bucket = grid.get(key);
+      if (!bucket) grid.set(key, (bucket = []));
+      bucket.push(rect);
+    }
+  }
+  function isFree(rect) {
+    for (const key of labelGridCells(rect)) {
+      const bucket = grid.get(key);
+      if (bucket && bucket.some((other) => rectsOverlap(rect, other))) return false;
+    }
+    return true;
+  }
+
+  currentMarkers.forEach(({ marker, radius }) => {
     const pt = map.latLngToLayerPoint(marker.getLatLng());
-    return { left: pt.x - radius, right: pt.x + radius, top: pt.y - radius, bottom: pt.y + radius };
+    occupy({ left: pt.x - radius, right: pt.x + radius, top: pt.y - radius, bottom: pt.y + radius });
   });
 
   const byPrice = [...currentMarkers].sort((a, b) => a.bar.pricePerHalfLiter - b.bar.pricePerHalfLiter);
@@ -188,12 +234,12 @@ function updateNameLabels() {
       { dir: "bottom", top: pt.y + radius + gap },
     ].map((c) => ({ ...c, left: pt.x - halfWidth, right: pt.x + halfWidth, bottom: c.top + labelHeight }));
 
-    const fit = candidates.find((c) => !occupied.some((rect) => rectsOverlap(c, rect)));
+    const fit = candidates.find(isFree);
 
     if (marker.getTooltip()) marker.unbindTooltip();
 
     if (fit) {
-      occupied.push(fit);
+      occupy(fit);
       marker.bindTooltip(escapeHtml(bar.name), {
         permanent: true,
         direction: fit.dir,
@@ -403,6 +449,30 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Mutates an already-rendered dot's existing DOM in place (color, border,
+// shape, price/badge text) instead of handing Leaflet a freshly-built
+// L.divIcon to swap in - cheap enough to run on every bar on every slider
+// tick, where rebuilding every icon's HTML from scratch was not.
+function updateDotIcon(marker, bar, color, stale) {
+  const el = marker.getElement();
+  const dot = el && el.querySelector(".price-dot");
+  if (!dot) return;
+
+  dot.classList.toggle("price-dot--square", isHappyHour(bar));
+  dot.style.background = color;
+  dot.style.borderColor = stale ? "#333" : "#1a1a1a";
+  dot.style.borderStyle = stale ? "dashed" : "solid";
+  dot.style.borderWidth = `${stale ? 2 : 1}px`;
+
+  const badge = priceChangeBadge(bar);
+  const badgeHtml = badge ? `<span class="price-dot-badge" title="Prisen stiger om ${badge}">${badge}</span>` : "";
+  const content = `${Math.round(bar.pricePerHalfLiter)}${badgeHtml}`;
+  if (dot.dataset.content !== content) {
+    dot.innerHTML = content;
+    dot.dataset.content = content;
+  }
+}
+
 function wireCopyButton(el) {
   const btn = el.querySelector(".copy-btn");
   if (!btn || btn.dataset.wired) return;
@@ -495,9 +565,15 @@ function fadeFactor(price, filterMin, filterMax) {
 let showNearby = Boolean(loadStored(STORAGE_KEYS.showNearby));
 let currentFilter = { min: 0, max: 0 };
 
+// Markers are kept alive across renders, keyed by bar id, instead of being
+// torn down and rebuilt on every call (the slider fires this on every
+// `input` event while dragging). A bar that stays visible across two
+// renders gets its existing marker's icon mutated in place; only bars
+// entering/leaving the visible set create/destroy an actual L.marker.
+const markersById = new Map();
+
 function renderMarkers(filterMin, filterMax) {
   currentFilter = { min: filterMin, max: filterMax };
-  markersLayer.clearLayers();
 
   const inRangeBars = bars.filter(
     (bar) => bar.pricePerHalfLiter >= filterMin && bar.pricePerHalfLiter <= filterMax
@@ -515,18 +591,44 @@ function renderMarkers(filterMin, filterMax) {
   const colorHi = inRangePrices.length ? Math.max(...inRangePrices) : filterMax;
 
   const radius = DOT_RADIUS;
-  currentMarkers = [];
   const barsToDraw = showNearby ? [...inRangeBars, ...nearbyBars] : inRangeBars;
+  const nextIds = new Set();
+  currentMarkers = [];
+
   for (const bar of barsToDraw) {
+    nextIds.add(bar.id);
     const fade = fadeFactor(bar.pricePerHalfLiter, filterMin, filterMax);
     const stale = isStale(bar);
-    const marker = L.marker([bar.lat, bar.lng], {
-      icon: priceDotIcon(bar, priceColor(bar.pricePerHalfLiter, colorLo, colorHi, fade), stale),
-    });
-    marker.bindPopup(popupHtml(bar));
-    marker.addTo(markersLayer);
-    currentMarkers.push({ marker, bar, radius });
+    const color = priceColor(bar.pricePerHalfLiter, colorLo, colorHi, fade);
+
+    let entry = markersById.get(bar.id);
+    if (entry) {
+      // `bar` may be a fresh object (rebuildBars() always re-derives from
+      // scratch), so keep the entry - and the popup closure below, which
+      // reads through it - pointed at the current one.
+      entry.bar = bar;
+      entry.marker.setLatLng([bar.lat, bar.lng]);
+      updateDotIcon(entry.marker, bar, color, stale);
+    } else {
+      const marker = L.marker([bar.lat, bar.lng], { icon: priceDotIcon(bar, color, stale) });
+      entry = { marker, bar, radius };
+      // Popup content is only built the moment a popup actually opens
+      // (Leaflet calls content functions lazily), not for every bar on
+      // every render - most popups are never opened.
+      marker.bindPopup(() => popupHtml(entry.bar));
+      marker.addTo(markersLayer);
+      markersById.set(bar.id, entry);
+    }
+    currentMarkers.push(entry);
   }
+
+  for (const [id, entry] of markersById) {
+    if (!nextIds.has(id)) {
+      markersLayer.removeLayer(entry.marker);
+      markersById.delete(id);
+    }
+  }
+
   updateNameLabels();
 
   document.getElementById("legend-min").textContent = `${colorLo} kr`;
@@ -600,9 +702,22 @@ function setupSlider() {
     renderMarkers(lo, hi);
   }
 
-  minInput.addEventListener("input", update);
-  maxInput.addEventListener("input", update);
-  window.addEventListener("resize", update);
+  // Dragging a <input type="range"> fires "input" continuously (many times
+  // per second), and each one used to trigger a full re-render - coalesce
+  // bursts down to once per animation frame instead.
+  let updateQueued = false;
+  function scheduleUpdate() {
+    if (updateQueued) return;
+    updateQueued = true;
+    requestAnimationFrame(() => {
+      updateQueued = false;
+      update();
+    });
+  }
+
+  minInput.addEventListener("input", scheduleUpdate);
+  maxInput.addEventListener("input", scheduleUpdate);
+  window.addEventListener("resize", scheduleUpdate);
 
   document.querySelectorAll(".step-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
